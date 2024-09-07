@@ -29,6 +29,20 @@ dependencies {
 	
 }
 
+loom {
+	splitEnvironmentSourceSets()
+
+	accessWidenerPath = file("src/main/resources/tameable-foxes.accesswidener")
+
+	mods {
+		"tameable-foxes" {
+			sourceSet sourceSets.main
+			sourceSet sourceSets.client
+		}
+	}
+
+}
+
 processResources {
 	inputs.property "version", project.version
 
