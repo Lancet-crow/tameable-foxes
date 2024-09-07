@@ -3,7 +3,7 @@
 	"package": "lancet_.tameable_foxes.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
-		"ExampleMixin"
+		"FoxMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
