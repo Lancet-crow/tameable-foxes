@@ -39,7 +39,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 public class TameableFoxes
 {
     // Define mod id in a common place for everything to reference
-    public static final String MODID = "tameable-foxes";
+    public static final String MODID = "tameable_foxes";
     // Directly reference a slf4j logger
     private static final Logger LOGGER = LogUtils.getLogger();
     // The constructor for the mod class is the first code that is run when your mod is loaded.
