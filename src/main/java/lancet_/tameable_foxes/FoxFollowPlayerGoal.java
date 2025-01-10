@@ -1,15 +1,12 @@
 package lancet_.tameable_foxes;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.block.LeavesBlock;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.pathing.EntityNavigation;
 import net.minecraft.entity.ai.pathing.LandPathNodeMaker;
 import net.minecraft.entity.ai.pathing.PathNodeType;
-import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.passive.FoxEntity;
-import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.EnumSet;
@@ -119,7 +116,7 @@ public class FoxFollowPlayerGoal extends Goal {
     }
 
     private boolean canTeleportTo(BlockPos pos) {
-        PathNodeType pathNodeType = LandPathNodeMaker.getLandNodeType((MobEntity) (Object) this, pos);
+        PathNodeType pathNodeType = LandPathNodeMaker.getLandNodeType(fop, pos);
         if (pathNodeType != PathNodeType.WALKABLE) {
             return false;
         }

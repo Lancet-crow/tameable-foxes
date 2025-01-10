@@ -3,7 +3,6 @@ package lancet_.tameable_foxes.mixin;
 import lancet_.tameable_foxes.FoxAttackWithOwnerGoal;
 import lancet_.tameable_foxes.FoxFollowPlayerGoal;
 import lancet_.tameable_foxes.FoxSitGoal;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.*;
@@ -16,6 +15,7 @@ import net.minecraft.recipe.Ingredient;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -27,15 +27,18 @@ import static net.minecraft.entity.passive.FoxEntity.OWNER;
 
 
 @Mixin(FoxEntity.class)
-@SuppressWarnings("unused")
 public abstract class FoxMixin extends AnimalEntity {
-
+    //@Shadow public abstract void setSitting(boolean p_28611_);
+    @Nullable
+    @Unique
+    FoxEntity foxEntity;
     protected FoxMixin(EntityType<? extends AnimalEntity> entityType, World world) {
         super(entityType, world);
+        foxEntity = (FoxEntity) (Object) entityType;
     }
     @Unique
     public ActionResult interactMob(PlayerEntity player, Hand hand) {
-        FoxEntity foxEntity = ((FoxEntity) (Object) this);
+        if(foxEntity == null) foxEntity = (FoxEntity) (Object) this;
         ActionResult actionResult = super.interactMob(player,hand);
         if(actionResult.isAccepted()) return actionResult;
         UUID uuid = foxEntity.getDataTracker().get(OWNER).orElse(null);
@@ -48,36 +51,36 @@ public abstract class FoxMixin extends AnimalEntity {
     }
     @Inject(method = "initGoals", at = @At("HEAD"), cancellable = true)
     public void addAiGoals(CallbackInfo ci) {
-        FoxEntity foxEntity = ((FoxEntity) (Object) this);
         //followChickenAndRabbitGoal
-        foxEntity.followChickenAndRabbitGoal = new ActiveTargetGoal<AnimalEntity>((
+        if(foxEntity == null) foxEntity = (FoxEntity) (Object) this;
+        foxEntity.followChickenAndRabbitGoal = new ActiveTargetGoal<>((
                 foxEntity), AnimalEntity.class, 10, false,
                 false, entity -> OWNER != null &&
                 (entity instanceof ChickenEntity || entity instanceof RabbitEntity));
-        foxEntity.followBabyTurtleGoal = new ActiveTargetGoal<TurtleEntity>(foxEntity, TurtleEntity.class,
+        foxEntity.followBabyTurtleGoal = new ActiveTargetGoal<>(foxEntity, TurtleEntity.class,
                 10, false, false,
-                entity -> TurtleEntity.BABY_TURTLE_ON_LAND_FILTER.test((LivingEntity)entity) && OWNER != null);
-        foxEntity.followFishGoal = new ActiveTargetGoal<FishEntity>(foxEntity, FishEntity.class, 20,
+                entity -> TurtleEntity.BABY_TURTLE_ON_LAND_FILTER.test(entity) && OWNER != null);
+        foxEntity.followFishGoal = new ActiveTargetGoal<>(foxEntity, FishEntity.class, 20,
                 false, false, entity -> entity instanceof SchoolingFishEntity && OWNER != null);
         foxEntity.goalSelector.add(0, foxEntity.new FoxSwimGoal());
         foxEntity.goalSelector.add(3, foxEntity.new MateGoal(1.0));
         foxEntity.goalSelector.add(6, foxEntity.new JumpChasingGoal());
         foxEntity.goalSelector.add(11, foxEntity.new PickupItemGoal());
         foxEntity.goalSelector.add(12, foxEntity.new LookAtEntityGoal(foxEntity, PlayerEntity.class, 24.0f));
-        foxEntity.goalSelector.add(7, foxEntity.new AttackGoal((double) 1.2f, true));
-        foxEntity.goalSelector.add(4, new FleeEntityGoal<WolfEntity>(foxEntity, WolfEntity.class, 8.0f,
+        foxEntity.goalSelector.add(7, foxEntity.new AttackGoal(1.2f, true));
+        foxEntity.goalSelector.add(4, new FleeEntityGoal<>(foxEntity, WolfEntity.class, 8.0f,
                 1.6, 1.4, entity -> !((WolfEntity) entity).isTamed() && !foxEntity.isAggressive()));
-        foxEntity.goalSelector.add(4, new FleeEntityGoal<PolarBearEntity>(foxEntity, PolarBearEntity.class,
+        foxEntity.goalSelector.add(4, new FleeEntityGoal<>(foxEntity, PolarBearEntity.class,
                 8.0f, 1.6, 1.4, entity -> !foxEntity.isAggressive()));
         foxEntity.goalSelector.add(10, new PounceAtTargetGoal(foxEntity, 0.4f));
         foxEntity.goalSelector.add(11, new WanderAroundFarGoal(foxEntity, 1.0));
         foxEntity.targetSelector.add(3, (foxEntity.new DefendFriendGoal(LivingEntity.class, false,
-                false, entity -> FoxEntity.JUST_ATTACKED_SOMETHING_FILTER.test((Entity) entity) &&
+                false, entity -> FoxEntity.JUST_ATTACKED_SOMETHING_FILTER.test(entity) &&
                 !foxEntity.canTrust(entity.getUuid()))));
         foxEntity.goalSelector.add(1, new FoxSitGoal(foxEntity));
         foxEntity.goalSelector.add(1, new FoxAttackWithOwnerGoal(foxEntity));
         foxEntity.goalSelector.add(6, new FoxFollowPlayerGoal(foxEntity, 1.0, 10.0f, 2.0f));
-        foxEntity.goalSelector.add(4, new FleeEntityGoal<PlayerEntity>(foxEntity,
+        foxEntity.goalSelector.add(4, new FleeEntityGoal<>(foxEntity,
                 PlayerEntity.class, 16.0f, 1.6, 1.4, e -> !e.isSneaky()
                 && !EntityPredicates.EXCEPT_CREATIVE_OR_SPECTATOR.test(e) && !foxEntity.canTrust(e.getUuid())
                 && !(foxEntity.isAggressive())));

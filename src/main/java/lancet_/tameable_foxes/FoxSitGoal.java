@@ -4,13 +4,11 @@ package lancet_.tameable_foxes;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.passive.FoxEntity;
-import net.minecraft.entity.passive.TameableEntity;
 
 import java.util.EnumSet;
 import java.util.Objects;
 import java.util.UUID;
 
-import static lancet_.tameable_foxes.TameableFoxes.LOGGER;
 import static net.minecraft.entity.passive.FoxEntity.OWNER;
 
 public class FoxSitGoal extends Goal {
@@ -19,6 +17,7 @@ public class FoxSitGoal extends Goal {
 
     public FoxSitGoal(FoxEntity entity) {
         this.fop = entity;
+
         this.setControls(EnumSet.of(Goal.Control.JUMP, Goal.Control.MOVE));
     }
 
@@ -52,6 +51,8 @@ public class FoxSitGoal extends Goal {
 
     @Override
     public void start() {
+        this.fop.setMovementSpeed(0f);
         this.fop.getNavigation().stop();
     }
+
 }
