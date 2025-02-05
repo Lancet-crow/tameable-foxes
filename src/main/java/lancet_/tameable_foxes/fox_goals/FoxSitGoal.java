@@ -1,4 +1,4 @@
-package lancet_.tameable_foxes;
+package lancet_.tameable_foxes.fox_goals;
 
 
 import net.minecraft.entity.LivingEntity;

@@ -1,8 +1,9 @@
 package lancet_.tameable_foxes.mixin;
 
-import lancet_.tameable_foxes.FoxAttackWithOwnerGoal;
-import lancet_.tameable_foxes.FoxFollowPlayerGoal;
-import lancet_.tameable_foxes.FoxSitGoal;
+import lancet_.tameable_foxes.config.TameableFoxesConfig;
+import lancet_.tameable_foxes.fox_goals.FoxAttackWithOwnerGoal;
+import lancet_.tameable_foxes.fox_goals.FoxFollowPlayerGoal;
+import lancet_.tameable_foxes.fox_goals.FoxSitGoal;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.*;
@@ -21,6 +22,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import static net.minecraft.entity.passive.FoxEntity.OWNER;
@@ -39,9 +41,14 @@ public abstract class FoxMixin extends AnimalEntity {
     @Unique
     public ActionResult interactMob(PlayerEntity player, Hand hand) {
         if(foxEntity == null) foxEntity = (FoxEntity) (Object) this;
-        ActionResult actionResult = super.interactMob(player,hand);
-        if(actionResult.isAccepted()) return actionResult;
         UUID uuid = foxEntity.getDataTracker().get(OWNER).orElse(null);
+        ActionResult actionResult = super.interactMob(player,hand);
+        if(actionResult.isAccepted()) {
+            if (uuid == null && TameableFoxesConfig.INSTANCE.getConfig().foxesTameDirectly) {
+                setFoxOwner(Optional.ofNullable(player.getUuid()));
+            }
+            return actionResult;
+        }
         if (!player.getUuid().equals(uuid)) return ActionResult.PASS;
         foxEntity.setSitting(!foxEntity.isSitting());
         this.jumping = false;
@@ -87,5 +94,11 @@ public abstract class FoxMixin extends AnimalEntity {
         foxEntity.goalSelector.add(1, new TemptGoal(foxEntity, 0.75,
                 Ingredient.ofStacks(new ItemStack(Items.SWEET_BERRIES)), false));
         ci.cancel();
+    }
+
+    public void setFoxOwner(Optional<UUID> newOwnerUUID){
+        assert foxEntity != null;
+        foxEntity.getDataTracker().set(OWNER, newOwnerUUID);
+        addAiGoals(new CallbackInfo("owningFox", true));
     }
 }
