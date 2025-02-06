@@ -1,6 +1,6 @@
 package lancet_.tameable_foxes.mixin;
 
-import lancet_.tameable_foxes.config.TameableFoxesConfig;
+import lancet_.tameable_foxes.TameableFoxes;
 import lancet_.tameable_foxes.fox_goals.FoxAttackWithOwnerGoal;
 import lancet_.tameable_foxes.fox_goals.FoxFollowPlayerGoal;
 import lancet_.tameable_foxes.fox_goals.FoxSitGoal;
@@ -44,7 +44,7 @@ public abstract class FoxMixin extends AnimalEntity {
         UUID uuid = foxEntity.getDataTracker().get(OWNER).orElse(null);
         ActionResult actionResult = super.interactMob(player,hand);
         if(actionResult.isAccepted()) {
-            if (uuid == null && TameableFoxesConfig.INSTANCE.getConfig().foxesTameDirectly) {
+            if (uuid == null && TameableFoxes.CONFIG.foxesTameDirectly()) {
                 setFoxOwner(Optional.ofNullable(player.getUuid()));
             }
             return actionResult;
