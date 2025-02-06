@@ -1,6 +1,5 @@
 package lancet_.tameable_foxes.mixin;
 
-import lancet_.tameable_foxes.config.TameableFoxesConfig;
 import lancet_.tameable_foxes.fox_goals.FoxAttackWithOwnerGoal;
 import lancet_.tameable_foxes.fox_goals.FoxFollowPlayerGoal;
 import lancet_.tameable_foxes.fox_goals.FoxSitGoal;
@@ -46,7 +45,7 @@ public abstract class FoxMixin extends AnimalEntity {
         UUID uuid = foxEntity.getDataTracker().get(OWNER).orElse(null);
         ActionResult actionResult = super.interactMob(player,hand);
         if(actionResult.isAccepted()){
-            if (uuid == null && TameableFoxesConfig.INSTANCE.getConfig().foxesTameDirectly){
+            if (actionResult.equals(ActionResult.CONSUME) && uuid == null && TameableFoxes.CONFIG.foxesTameDirectly()){
                 setFoxOwner(Optional.ofNullable(player.getUuid()));
             }
             return actionResult;
@@ -60,8 +59,6 @@ public abstract class FoxMixin extends AnimalEntity {
     }
     @Inject(method = "initGoals", at = @At("HEAD"), cancellable = true)
     public void addAiGoals(CallbackInfo ci) {
-        //followChickenAndRabbitGoal
-        TameableFoxes.LOGGER.info("Adding AI Goals to a fox");
         if(foxEntity == null) foxEntity = (FoxEntity) (Object) this;
         foxEntity.followChickenAndRabbitGoal = new ActiveTargetGoal<>((
                 foxEntity), AnimalEntity.class, 10, false,
@@ -100,7 +97,6 @@ public abstract class FoxMixin extends AnimalEntity {
     }
 
     public void setFoxOwner(Optional<UUID> newOwnerUUID){
-        TameableFoxes.LOGGER.info(String.valueOf(newOwnerUUID));
         assert foxEntity != null;
         foxEntity.getDataTracker().set(OWNER, newOwnerUUID);
         addAiGoals(new CallbackInfo("owningFox", true));

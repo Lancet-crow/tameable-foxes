@@ -12,12 +12,8 @@ base {
 
 repositories {
 	maven {
-		name 'Xander Maven'
-		url 'https://maven.isxander.dev/releases'
-	}
-	maven {
-		name = "Terraformers"
-		url = "https://maven.terraformersmc.com/"
+		name = "OwO Lib"
+		url = 'https://maven.wispforest.io/releases/'
 	}
 }
 
@@ -36,8 +32,9 @@ dependencies {
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-	modImplementation "dev.isxander:yet-another-config-lib:${project.yacl_version}"
-	modApi "com.terraformersmc:modmenu:${project.modmenu_version}"
+	modImplementation "io.wispforest:owo-lib:${project.owo_version}"
+	include "io.wispforest:owo-sentinel:${project.owo_version}"
+	annotationProcessor modImplementation("io.wispforest:owo-lib:${project.owo_version}")
 }
 
 loom {
