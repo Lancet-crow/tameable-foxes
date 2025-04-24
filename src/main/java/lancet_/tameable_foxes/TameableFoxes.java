@@ -1,6 +1,5 @@
 package lancet_.tameable_foxes;
 
-import lancet_.tameable_foxes.config.TameableFoxesConfig;
 import net.fabricmc.api.ModInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,13 +12,12 @@ public class TameableFoxes implements ModInitializer {
 	// That way, it's clear which mod wrote info, warnings, and errors.
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
-	public static final TameableFoxesConfig CONFIG = TameableFoxesConfig.createAndLoad();
-
 	@Override
 	public void onInitialize() {
 		// This code runs as soon as Minecraft is in a mod-load-ready state.
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
+		TameableFoxesConfig.init();
 
 		LOGGER.info("Foxes becoming tameable...");
 	}
