@@ -1,19 +1,20 @@
 package lancet_.tameable_foxes.fox_goals;
 
 
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.passive.FoxEntity;
+import org.jetbrains.annotations.Nullable;
+import org.spongepowered.asm.mixin.Unique;
 
 import java.util.EnumSet;
-import java.util.Objects;
 import java.util.UUID;
 
 import static net.minecraft.entity.passive.FoxEntity.OWNER;
 
 public class FoxSitGoal extends Goal {
     private final FoxEntity fop;
-    private LivingEntity owner = null;
 
     public FoxSitGoal(FoxEntity entity) {
         this.fop = entity;
@@ -22,37 +23,55 @@ public class FoxSitGoal extends Goal {
     }
 
     @Override
-    public boolean shouldContinue() {
-        return this.fop.isSitting() && !this.fop.isLeashed();
-    }
+    public boolean shouldContinue() {return this.fop.isSitting() && !this.fop.isLeashed();}
 
     @Override
     public boolean canStart() {
-        if (this.fop.isInsideWaterOrBubbleColumn()) {
+        if (!isTamed()) {
             return false;
-        }
-        if (!this.fop.isOnGround()) {
+        } else if (this.fop.isInsideWaterOrBubbleColumn()) {
             return false;
-        }
-        UUID uuid = this.fop.getDataTracker().get(OWNER).orElse(null);
-        if(uuid == null) {
+        } else if (!this.fop.isOnGround()) {
             return false;
+        } else {
+            LivingEntity livingEntity = getOwner();
+            if (livingEntity == null) {
+                return true;
+            } else {
+                return (!(this.fop.squaredDistanceTo(livingEntity) < 144.0) || livingEntity.getAttacker() == null) && this.fop.isSitting();
+            }
         }
-        LivingEntity livingEntity = Objects.requireNonNull(this.fop.getWorld().getServer()).getPlayerManager().getPlayer(uuid);
-        if (livingEntity == null) {
-            return true;
-        }
-        if (this.fop.squaredDistanceTo(livingEntity) < 144.0 && livingEntity.getAttacker() != null) {
-            return false;
-        }
-        owner = livingEntity;
-        return this.fop.isSitting();
     }
 
     @Override
     public void start() {
         this.fop.setMovementSpeed(0f);
         this.fop.getNavigation().stop();
+        this.fop.setSitting(true);
+        this.fop.setWalking(false);
     }
 
+    @Override
+    public void stop(){
+        this.fop.setSitting(false);
+    }
+
+    @Unique
+    public boolean isTamed(){
+        return getOwnerUuid() != null;
+    }
+
+    public UUID getOwnerUuid(){
+        assert this.fop != null;
+        return this.fop.getDataTracker().get(OWNER).orElse(null);
+    }
+
+    @Nullable LivingEntity getOwner() {
+        UUID uUID = this.getOwnerUuid();
+        if (uUID == null) {
+            return null;
+        } else {
+            return fop.getEntityWorld().getPlayerByUuid(uUID);
+        }
+    }
 }
