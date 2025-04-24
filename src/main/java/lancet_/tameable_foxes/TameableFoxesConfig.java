@@ -1,13 +1,15 @@
 package lancet_.tameable_foxes;
 
 import me.fzzyhmstrs.fzzy_config.annotations.Action;
-import me.fzzyhmstrs.fzzy_config.annotations.ClientModifiable;
 import me.fzzyhmstrs.fzzy_config.annotations.RequiresAction;
 import me.fzzyhmstrs.fzzy_config.api.ConfigApiJava;
 import me.fzzyhmstrs.fzzy_config.api.RegisterType;
 import me.fzzyhmstrs.fzzy_config.config.Config;
+import me.fzzyhmstrs.fzzy_config.config.ConfigGroup;
 import me.fzzyhmstrs.fzzy_config.validation.collection.ValidatedList;
 import me.fzzyhmstrs.fzzy_config.validation.minecraft.ValidatedIdentifier;
+import me.fzzyhmstrs.fzzy_config.validation.misc.ValidatedBoolean;
+import me.fzzyhmstrs.fzzy_config.validation.number.ValidatedInt;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
@@ -31,6 +33,9 @@ public class TameableFoxesConfig extends Config {
 
     public static List<Item> FOX_TAMING_ITEMS = List.of();
     public static List<Item> FOX_BREEDING_ITEMS = List.of();
+
+    @RequiresAction(action = Action.RESTART)
+    public boolean foxesTameDirectly = true;
 
     public static Stream<ItemStack> getFoxTamingItemStacks(){
         Stream<ItemStack> foxTamingItemStacks = Stream.<ItemStack>builder().build();

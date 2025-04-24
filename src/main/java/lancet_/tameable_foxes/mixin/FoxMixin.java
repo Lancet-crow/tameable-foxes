@@ -3,6 +3,7 @@ package lancet_.tameable_foxes.mixin;
 import lancet_.tameable_foxes.TameableFoxesConfig;
 import lancet_.tameable_foxes.fox_goals.*;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Tameable;
 import net.minecraft.entity.ai.goal.*;
@@ -11,13 +12,12 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.recipe.Ingredient;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -31,6 +31,8 @@ import static net.minecraft.entity.passive.FoxEntity.OWNER;
 
 @Mixin(FoxEntity.class)
 public abstract class FoxMixin extends AnimalEntity implements Tameable {
+    @Shadow public abstract boolean isSitting();
+
     @Nullable
     @Unique
     FoxEntity foxEntity;
@@ -43,7 +45,7 @@ public abstract class FoxMixin extends AnimalEntity implements Tameable {
         if(foxEntity == null) foxEntity = (FoxEntity) (Object) this;
         UUID uuid = foxEntity.getDataTracker().get(OWNER).orElse(null);
         ActionResult actionResult = super.interactMob(player,hand);
-        if (uuid == null && isTamingItem(player, hand)){
+        if (uuid == null && isTamingItem(player, hand) && (TameableFoxesConfig.config.foxesTameDirectly || !isBreedingItem(player.getStackInHand(hand)))){
             this.eat(player, hand, player.getStackInHand(hand));
             this.lovePlayer(player);
             setFoxOwner(Optional.ofNullable(player.getUuid()));
@@ -62,13 +64,17 @@ public abstract class FoxMixin extends AnimalEntity implements Tameable {
             foxEntity.setSleeping(false);
         }
         else{
-            //player.sendMessage(Text.of("Making fox to setSitting:" + !foxEntity.isSitting()));
             foxEntity.setSitting(!foxEntity.isSitting());
             this.jumping = false;
             this.navigation.stop();
             this.setTarget(null);
         }
         return ActionResult.SUCCESS;
+    }
+
+    @Override
+    protected boolean shouldFollowLeash() {
+        return !isSitting();
     }
 
     @Unique
@@ -98,19 +104,6 @@ public abstract class FoxMixin extends AnimalEntity implements Tameable {
         }
         return false;
     }
-
-    /*@Override
-    @Nullable
-    public FoxEntity createChild(ServerWorld serverWorld, PassiveEntity passiveEntity) {
-        FoxEntity fox = EntityType.FOX.create(serverWorld);
-        if (fox != null) {
-            UUID uUID = this.getOwnerUuid();
-            if (uUID != null) {
-                fox.getDataTracker().set(OWNER, Optional.of(uUID));
-            }
-        }
-        return fox;
-    }*/
 
     @Override
     public boolean isBreedingItem(ItemStack stack){

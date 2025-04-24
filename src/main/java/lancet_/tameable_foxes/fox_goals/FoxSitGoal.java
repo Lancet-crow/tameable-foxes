@@ -23,7 +23,7 @@ public class FoxSitGoal extends Goal {
     }
 
     @Override
-    public boolean shouldContinue() {return this.fop.isSitting() && !this.fop.isLeashed();}
+    public boolean shouldContinue() {return this.fop.isSitting(); }
 
     @Override
     public boolean canStart() {
