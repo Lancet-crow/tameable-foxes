@@ -1,5 +1,7 @@
 package lancet_.tameable_foxes.fox_goals;
 
+import lancet_.tameable_foxes.TameableFoxesConfig;
+import lancet_.tameable_foxes.TamedFox;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.TargetPredicate;
 import net.minecraft.entity.ai.goal.TrackTargetGoal;
@@ -33,7 +35,7 @@ public class FoxAttackWithOwnerGoal extends TrackTargetGoal {
         if (this.fop.isSitting()) {
             return false;
         }
-        UUID uuid = this.fop.getDataTracker().get(OWNER).orElse(null);
+        UUID uuid = ((TamedFox)this.fop).getOwnerUuid(this.fop);
         if(uuid == null) {
             return false;
         }
@@ -60,13 +62,16 @@ public class FoxAttackWithOwnerGoal extends TrackTargetGoal {
     }
 
     public boolean canAttackWithOwner(LivingEntity target, LivingEntity owner) {
-        if (target instanceof CreeperEntity || target instanceof GhastEntity) {
+        if (!TameableFoxesConfig.config.foxesAttackWithOwner){
+            return false;
+        }
+        else if (target instanceof CreeperEntity || target instanceof GhastEntity) {
             return false;
         } else if (target instanceof WolfEntity wolfEntity) {
             return !wolfEntity.isTamed() || wolfEntity.getOwner() != owner;
         }else if (target instanceof FoxEntity foxEntity) {
-            UUID thisFoxUuid = this.fop.getDataTracker().get(OWNER).orElse(null);
-            UUID otherFoxUuid = foxEntity.getDataTracker().get(OWNER).orElse(null);
+            UUID thisFoxUuid = ((TamedFox)this.fop).getOwnerUuid(this.fop);
+            UUID otherFoxUuid = ((TamedFox)foxEntity).getOwnerUuid(foxEntity);
             return !Objects.equals(otherFoxUuid, thisFoxUuid);
         } else if (target instanceof PlayerEntity && owner instanceof PlayerEntity && !((PlayerEntity)owner).shouldDamagePlayer((PlayerEntity)target)) {
             return false;

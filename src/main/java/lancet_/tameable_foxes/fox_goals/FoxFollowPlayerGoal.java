@@ -1,5 +1,7 @@
 package lancet_.tameable_foxes.fox_goals;
 
+import lancet_.tameable_foxes.TamedFox;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LeavesBlock;
 import net.minecraft.entity.LivingEntity;
@@ -10,16 +12,16 @@ import net.minecraft.entity.ai.pathing.PathNodeType;
 import net.minecraft.entity.passive.FoxEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldView;
+import snownee.companion.CompanionCommonConfig;
+import snownee.companion.Hooks;
 
 import java.util.EnumSet;
 import java.util.Objects;
 import java.util.UUID;
 
-import static net.minecraft.entity.passive.FoxEntity.OWNER;
-
 public class FoxFollowPlayerGoal extends Goal {
-    private final FoxEntity fop;
-    private LivingEntity owner;
+    protected final FoxEntity fop;
+    protected LivingEntity owner;
     private final double speed;
     private final float minDistance;
     private final float maxDistance;
@@ -27,9 +29,9 @@ public class FoxFollowPlayerGoal extends Goal {
     private final EntityNavigation navigation;
     private float oldWaterPathfindingPenalty;
 
-    private boolean leavesAllowed;
+    protected final boolean leavesAllowed;
 
-    private WorldView world;
+    protected final WorldView world;
 
     public FoxFollowPlayerGoal(FoxEntity entity, double speed, float minDistance, float maxDistance, boolean leavesAllowed) {
         this.fop = entity;
@@ -43,7 +45,7 @@ public class FoxFollowPlayerGoal extends Goal {
     }
     @Override
     public boolean canStart() {
-        UUID uuid = this.fop.getDataTracker().get(OWNER).orElse(null);
+        UUID uuid = ((TamedFox)this.fop).getOwnerUuid(this.fop);
         if(uuid == null) {
             return false;
         }
@@ -51,7 +53,11 @@ public class FoxFollowPlayerGoal extends Goal {
         if (livingEntity == null) {
             return false;
         }
-        if (this.fop.isSitting()){
+        if (this.fop.isSitting() || (this.fop.isSleeping() && livingEntity.isSneaking())){
+            return false;
+        }
+        if (this.fop.goalSelector.getRunningGoals().anyMatch((goal) -> goal.getGoal() instanceof
+        FoxEntity.AvoidDaylightGoal)){
             return false;
         }
         if (livingEntity.isSpectator()) {
@@ -104,7 +110,7 @@ public class FoxFollowPlayerGoal extends Goal {
         }
     }
 
-    private void tryTeleport() {
+    protected void tryTeleport() {
         BlockPos blockPos = this.owner.getBlockPos();
         for (int i = 0; i < 10; ++i) {
             int j = this.getRandomInt(-3, 3);
@@ -113,6 +119,11 @@ public class FoxFollowPlayerGoal extends Goal {
             boolean bl = this.tryTeleportTo(blockPos.getX() + j, blockPos.getY() + k, blockPos.getZ() + l);
             if (bl) {
                 return;
+            }
+        }
+        if (FabricLoader.getInstance().isModLoaded("companion")){
+            if (CompanionCommonConfig.petForceTeleportingIfFollowFailed && this.fop != null) {
+                Hooks.teleportWithRandomOffset(this.fop, this.owner.getWorld(), this.owner.getBlockPos(), this.leavesAllowed, this.owner).ifPresent((vec) -> this.fop.requestTeleport(vec.x, vec.y, vec.z));
             }
         }
     }

@@ -15,6 +15,18 @@ repositories {
 		name = "FzzyMaven"
 		url = "https://maven.fzzyhmstrs.me/"
 	}
+	maven { url = "https://maven.bawnorton.com/releases" }
+	exclusiveContent {
+		forRepository {
+			maven {
+				name = "Modrinth"
+				url = "https://api.modrinth.com/maven"
+			}
+		}
+		filter {
+			includeGroup "maven.modrinth"
+		}
+	}
 }
 
 fabricApi {
@@ -33,6 +45,14 @@ dependencies {
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
 	modImplementation "me.fzzyhmstrs:fzzy_config:${project.fzzyConfigVersion}"
+
+	include(implementation(annotationProcessor("com.github.bawnorton.mixinsquared:mixinsquared-fabric:0.3.2-beta.3")))
+
+	modImplementation "maven.modrinth:companion:5.2.2+fabric"
+
+	modImplementation "maven.modrinth:not-enough-animations:1.9.3-1.20.1"
+
+	//modImplementation "maven.modrinth:indypets:1.4.1-1.20.1"
 }
 
 loom {
