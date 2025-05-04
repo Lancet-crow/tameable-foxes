@@ -43,6 +43,8 @@ public class TameableFoxesConfig extends Config {
 
     public boolean foxesCanIgnoreMobGriefingRule = false;
 
+    public boolean foxesTrustOnBorn = true;
+
     public static Stream<ItemStack> getFoxTamingItemStacks(){
         Stream<ItemStack> foxTamingItemStacks = Stream.<ItemStack>builder().build();
         for (Item item: FOX_TAMING_ITEMS

@@ -20,6 +20,11 @@ public final class TameableFoxesMixinPlugin implements IMixinConfigPlugin {
             "lancet_.tameable_foxes.mixin.compat.companion.CompanionHooksMixin", () -> FabricLoader.getInstance().isModLoaded("companion"),
             "lancet_.tameable_foxes.mixin.compat.companion.CompanionTargetGoalMixin", () -> FabricLoader.getInstance().isModLoaded("companion"),
             "lancet_.tameable_foxes.mixin.compat.companion.CompanionFoxMixin", () -> FabricLoader.getInstance().isModLoaded("companion"),
+            "lancet_.tameable_foxes.mixin.compat.companion.CompanionFoxAttackGoalMixin", () -> FabricLoader.getInstance().isModLoaded("companion"),
+            "lancet_.tameable_foxes.mixin.compat.companion.CompanionLivingEntityMixin", () -> FabricLoader.getInstance().isModLoaded("companion"),
+            "lancet_.tameable_foxes.mixin.compat.companion.CompanionEscapeDangerGoal", () -> FabricLoader.getInstance().isModLoaded("companion"),
+            "lancet_.tameable_foxes.mixin.compat.companion.CompanionStopWanderAroundMixin", () -> FabricLoader.getInstance().isModLoaded("companion"),
+            "lancet_.tameable_foxes.mixin.compat.companion.CompanionWanderAroundMixin", () -> FabricLoader.getInstance().isModLoaded("companion"),
             "lancet_.tameable_foxes.mixin.compat.NEAPetAnimationMixin", () -> FabricLoader.getInstance().isModLoaded("notenoughanimations")
     );
 

@@ -18,15 +18,7 @@ public class CompanionHooksMixin {
     )
     private static void shouldFollowIfFox(LivingEntity owner, MobEntity pet, CallbackInfoReturnable<Boolean> cir) {
         if (pet instanceof FoxEntity animal) {
-            if (animal.isSitting()) {
-                cir.setReturnValue(false);
-                cir.cancel();
-            }
-            cir.setReturnValue(animal.goalSelector.getRunningGoals().anyMatch(goal -> goal.getGoal() instanceof FoxFollowPlayerGoal));
-            //owner.sendMessage(Text.of(cir.getReturnValue().toString()));
-            cir.cancel();
+            cir.setReturnValue(!animal.isSitting());
         }
     }
-
-
 }

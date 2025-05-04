@@ -10,14 +10,13 @@ import net.minecraft.entity.ai.pathing.EntityNavigation;
 import net.minecraft.entity.ai.pathing.LandPathNodeMaker;
 import net.minecraft.entity.ai.pathing.PathNodeType;
 import net.minecraft.entity.passive.FoxEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldView;
 import snownee.companion.CompanionCommonConfig;
 import snownee.companion.Hooks;
 
 import java.util.EnumSet;
-import java.util.Objects;
-import java.util.UUID;
 
 public class FoxFollowPlayerGoal extends Goal {
     protected final FoxEntity fop;
@@ -45,28 +44,24 @@ public class FoxFollowPlayerGoal extends Goal {
     }
     @Override
     public boolean canStart() {
-        UUID uuid = ((TamedFox)this.fop).getOwnerUuid(this.fop);
-        if(uuid == null) {
+        PlayerEntity owner = ((TamedFox)this.fop).getOwner(this.fop);
+        if(owner == null) {
             return false;
         }
-        LivingEntity livingEntity = Objects.requireNonNull(this.fop.getWorld().getServer()).getPlayerManager().getPlayer(uuid);
-        if (livingEntity == null) {
-            return false;
-        }
-        if (this.fop.isSitting() || (this.fop.isSleeping() && livingEntity.isSneaking())){
+        if (this.fop.isSitting() || (this.fop.isSleeping() && owner.isSneaking())){
             return false;
         }
         if (this.fop.goalSelector.getRunningGoals().anyMatch((goal) -> goal.getGoal() instanceof
         FoxEntity.AvoidDaylightGoal)){
             return false;
         }
-        if (livingEntity.isSpectator()) {
+        if (owner.isSpectator()) {
             return false;
         }
-        if (this.fop.squaredDistanceTo(livingEntity) < (double)(this.minDistance * this.minDistance)) {
+        if (this.fop.squaredDistanceTo(owner) < (double)(this.minDistance * this.minDistance)) {
             return false;
         }
-        owner = livingEntity;
+        this.owner = owner;
         return true;
     }
 

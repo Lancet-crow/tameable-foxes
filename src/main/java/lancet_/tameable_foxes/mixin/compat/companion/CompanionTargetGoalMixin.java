@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import static lancet_.tameable_foxes.mixin.compat.companion.FoxHooks.wantsToAttack;
+import static lancet_.tameable_foxes.compat.companion.FoxHooks.wantsToAttack;
 
 @Mixin(value = TrackTargetGoal.class, priority = 1001)
 public class CompanionTargetGoalMixin {
@@ -29,9 +29,8 @@ public class CompanionTargetGoalMixin {
             cancellable = true
     )
     private void tameable_foxes_canContinueToUse(CallbackInfoReturnable<Boolean> ci) {
-        if (this.target != null && this.mob instanceof FoxEntity foxEntity && (((TamedFox)foxEntity).isTamed(foxEntity) && wantsToAttack(foxEntity, this.target))) {
-            ci.setReturnValue(false);
+        if (this.target != null && this.mob instanceof FoxEntity foxEntity && (((TamedFox)foxEntity).isTamed(foxEntity))) {
+            ci.setReturnValue(wantsToAttack(foxEntity, this.target));
         }
-
     }
 }

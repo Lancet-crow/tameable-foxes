@@ -9,13 +9,20 @@
     "PathAwareEntityMixin",
     "compat.CalmDownDogMixin",
     "compat.NEAPetAnimationMixin",
+    "compat.companion.CompanionEscapeDangerGoal",
+    "compat.companion.CompanionFoxAttackGoalMixin",
     "compat.companion.CompanionFoxMixin",
     "compat.companion.CompanionHooksMixin",
+    "compat.companion.CompanionLivingEntityMixin",
+    "compat.companion.CompanionStopWanderAroundMixin",
     "compat.companion.CompanionTargetGoalMixin",
+    "compat.companion.CompanionWanderAroundMixin",
     "fox_goals.FoxAvoidDaylightGoalMixin",
     "fox_goals.FoxFollowParentGoalMixin",
+    "fox_goals.FoxMateGoalMixin",
     "fox_goals.FoxMoveToHuntGoalMixin",
-    "fox_goals.FoxSitDownAndLookAroundGoalMixin"
+    "fox_goals.FoxSitDownAndLookAroundGoalMixin",
+    "fox_goals.FoxTemptGoalMixin"
   ],
   "injectors": {
     "defaultRequire": 1

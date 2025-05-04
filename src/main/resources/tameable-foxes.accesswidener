@@ -39,3 +39,4 @@ accessible class net/minecraft/entity/passive/FoxEntity$CalmDownGoal
 accessible method net/minecraft/entity/mob/MobEntity updateLeash ()V
 accessible method net/minecraft/entity/passive/FoxEntity setAggressive (Z)V
 accessible class net/minecraft/entity/passive/FoxEntity$FollowParentGoal
+accessible method net/minecraft/entity/passive/FoxEntity$MateGoal breed ()V

@@ -29,4 +29,5 @@ public abstract class CompanionFoxMixin implements CompanionTamableAnimal {
             }
         }
     }
+
 }

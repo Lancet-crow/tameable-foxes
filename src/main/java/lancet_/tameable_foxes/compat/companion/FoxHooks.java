@@ -1,4 +1,4 @@
-package lancet_.tameable_foxes.mixin.compat.companion;
+package lancet_.tameable_foxes.compat.companion;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.Monster;
