@@ -1,25 +1,41 @@
+<div align="center">
 
-Installation information
-=======
+## 🦊 <font color="#fe7d09">Tameable Foxes</font>
 
-This template repository can be directly cloned to get you started with a new
-mod. Simply create a new repository cloned from this one, by following the
-instructions provided by [GitHub](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template).
+![CuteFoxBanner](https://cdn.modrinth.com/data/cached_images/1c1247e88641f315bba2b54326244b7e72781290_0.webp)
 
-Once you have your clone, simply open the repository in the IDE of your choice. The usual recommendation for an IDE is either IntelliJ IDEA or Eclipse.
+<img src="https://raw.githubusercontent.com/Mqxx/GitHub-Markdown/1fd12c475756b54e467799d98eca7b406f109341/blockquotes/badge/dark-theme/danger.svg" width="100">
 
-If at any point you are missing libraries in your IDE, or you've run into problems you can
-run `gradlew --refresh-dependencies` to refresh the local cache. `gradlew clean` to reset everything 
-{this does not affect your code} and then start the process again.
+<font color="#de3735">Please read the changelogs, as they can be really important for you if you upgrade the mod from previous versions.</font>
 
-Mapping Names:
-============
-By default, the MDK is configured to use the official mapping names from Mojang for methods and fields 
-in the Minecraft codebase. These names are covered by a specific license. All modders should be aware of this
-license. For the latest license text, refer to the mapping file itself, or the reference copy here:
-https://github.com/NeoForged/NeoForm/blob/main/Mojang.md
+#
 
-Additional Resources: 
-==========
-Community Documentation: https://docs.neoforged.net/  
-NeoForged Discord: https://discord.neoforged.net/
+</div>
+
+**So, you wonder how to get a cute fox?**
+
+- Tame them with using glow berries (Can be changed in the config)  
+  **or**
+- You can breed them with sweet berries and the baby will trust you if the config is enabled. (True by Default)
+
+---
+
+## 🔍 F.A.Q
+
+- **Q: Does it work with Vulpine?**
+
+  - **A:** I'm sure it will not. You'll have to choose between them, sorry.
+
+- **Q: Will it work with any fox-related mod?**
+
+  - **A:** It can only be figured out by testing, feel free to open any issue if you find a incompatibility!
+
+- **Q: I have found a bug or incompatibility with this mod!**
+
+  - **A:** Open an issue on [GitHub](https://github.com/Lancet-crow/tameable-foxes/issues/new), please. I'll try to help you if its possible.
+
+---
+
+## 💜 Credits:
+
+This mod was inspired by 2 mods which being [Vulpine](https://modrinth.com/mod/vulpine) by **TalonFloof** <font color="#91949b">and</font> [Fox Pet](https://modrinth.com/mod/foxpet) by **Hyrlost**!
