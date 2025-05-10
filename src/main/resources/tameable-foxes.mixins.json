@@ -3,8 +3,15 @@
   "package": "lancet_.tameable_foxes.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "FoxMixin",
-    "PathAwareEntityMixin"
+    "FoxEntityMixin",
+    "TameableEntityMixin",
+    "compat.CalmDownDogMixin",
+    "fox_goals.FoxAvoidDaylightGoalMixin",
+    "fox_goals.FoxFollowParentGoalMixin",
+    "fox_goals.FoxMateGoal",
+    "fox_goals.FoxMoveToHuntGoalMixin",
+    "fox_goals.FoxSitDownAndLookAroundGoalMixin",
+    "fox_goals.FoxSitGoalMixin"
   ],
   "injectors": {
     "defaultRequire": 1

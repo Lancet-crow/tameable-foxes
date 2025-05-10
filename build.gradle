@@ -11,33 +11,41 @@ base {
 }
 
 repositories {
+	mavenCentral()
+	maven { url = "https://jitpack.io" }
 	maven {
 		name = "FzzyMaven"
 		url = "https://maven.fzzyhmstrs.me/"
 	}
 }
 
-fabricApi {
-	configureDataGeneration {
-		client = true
-	}
+/*List<ExternalModuleDependency> externalDeps = new ArrayList<ExternalModuleDependency>()
+
+dependencies {
+	externalDeps.add(implementation include('net.bytebuddy:byte-buddy-agent:1.14.0'))
+}*/
+
+loom {
+	accessWidenerPath = file("src/main/resources/tameable-foxes.accesswidener")
+	//splitEnvironmentSourceSets()
+
+	/*mods {
+		"tameable-foxes" {
+			sourceSet(sourceSets.main)
+			sourceSet(sourceSets.client)
+			dependency(externalDeps.toArray(new ExternalModuleDependency[]{}))
+		}
+	}*/
 }
 
 dependencies {
-	// To change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-
 	modImplementation "me.fzzyhmstrs:fzzy_config:${project.fzzyConfigVersion}"
-}
-
-loom {
-	accessWidenerPath = file("src/main/resources/tameable-foxes.accesswidener")
-
+	implementation include('net.bytebuddy:byte-buddy-agent:1.14.0')
 }
 
 processResources {
@@ -50,6 +58,11 @@ processResources {
 
 tasks.withType(JavaCompile).configureEach {
 	it.options.release = 17
+
+}
+
+tasks.withType(JavaExec).configureEach {
+	jvmArgs += ["--add-modules", "jdk.attach"]
 }
 
 java {
@@ -71,8 +84,7 @@ jar {
 // configure the maven publication
 publishing {
 	publications {
-		create("mavenJava", MavenPublication) {
-			artifactId = project.archives_base_name
+		mavenJava(MavenPublication) {
 			from components.java
 		}
 	}

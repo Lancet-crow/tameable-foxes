@@ -19,20 +19,21 @@
 			"lancet_.tameable_foxes.TameableFoxes"
 		]
 	},
+	"languageAdapters": {
+		"tameable-foxes": "lancet_.tameable_foxes.TameableAgent"
+	},
 	"mixins": [
 		"tameable-foxes.mixins.json"
 	],
-	"accessWidener" : "tameable-foxes.accesswidener",
 	"depends": {
 		"fabricloader": ">=0.16.10",
 		"minecraft": "~1.20.1",
 		"java": ">=17",
-		"fabric-api": "*",
-		"fzzy_config": ">=0.6.9+1.20.1"
+		"fabric-api": "*"
 	},
 	"custom": {
 		"fzzy_config": [
-			"tameable_foxes"
+			"tameable-foxes"
 		]
 	}
 }
