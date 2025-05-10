@@ -1,6 +1,5 @@
 package lancet_.tameable_foxes.mixin.compat.companion;
 
-import lancet_.tameable_foxes.TamedFox;
 import lancet_.tameable_foxes.fox_goals.FoxAttackWithOwnerGoal;
 import net.minecraft.entity.ai.goal.EscapeDangerGoal;
 import net.minecraft.entity.mob.PathAwareEntity;

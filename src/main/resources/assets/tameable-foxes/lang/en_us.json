@@ -1,0 +1,22 @@
+{
+  "tameable-foxes.config.foxTamingItems": "Fox Taming Items",
+  "tameable-foxes.config.foxTamingItems.desc": "Change or add items that is needed to tame a fox.",
+
+  "tameable-foxes.config.foxBreedingItems": "Fox Breeding Items",
+  "tameable-foxes.config.foxBreedingItems.desc": "Change or add items that is needed to breed a fox.",
+
+  "tameable-foxes.config.foxesAttackWithOwner": "Foxes Attack with Owner",
+  "tameable-foxes.config.foxesAttackWithOwner.desc": "If true, foxes will attack the mobs owner hits.",
+
+  "tameable-foxes.config.foxesTameDirectly": "Foxes Tame Directly",
+  "tameable-foxes.config.foxesTameDirectly.desc": "If false, foxes can only be tamed by breeding them.",
+
+  "tameable-foxes.config.foxesTamingChance": "Foxes Taming Chance",
+  "tameable-foxes.config.foxesTamingChance.desc": "0 = Untameable\n1 = Instant Tame",
+
+  "tameable-foxes.config.foxesCanIgnoreMobGriefingRule": "Foxes Ignore mobGriefing Gamerule",
+  "tameable-foxes.config.foxesCanIgnoreMobGriefingRule.desc": "If true, foxes will still pick items even if /gamerule mobGriefing set to false.",
+
+  "tameable-foxes.config.foxesTrustOnBorn": "Foxes Trust on Born",
+  "tameable-foxes.config.foxesTrustOnBorn.desc": "If true, when two foxed are bred, the baby will directly trust you and be tamed."
+}
