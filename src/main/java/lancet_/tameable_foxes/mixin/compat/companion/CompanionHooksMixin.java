@@ -1,6 +1,5 @@
 package lancet_.tameable_foxes.mixin.compat.companion;
 
-import lancet_.tameable_foxes.fox_goals.FoxFollowPlayerGoal;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.passive.FoxEntity;

@@ -3,13 +3,14 @@
 	"id": "tameable-foxes",
 	"version": "${version}",
 	"name": "Tameable Foxes",
-	"description": "Small mod that makes foxes tameable",
+	"description": "A mod that makes foxes tameable",
 	"authors": [
 		"Lancet_"
 	],
 	"contact": {
 		"homepage": "https://modrinth.com/mod/tameable-foxes",
-		"sources": "https://github.com/Lancet-crow/tameable-foxes/"
+		"sources": "https://github.com/Lancet-crow/tameable-foxes",
+		"issues": "https://github.com/Lancet-crow/tameable-foxes/issues"
 	},
 	"license": "CC0-1.0",
 	"icon": "assets/tameable-foxes/icon.png",

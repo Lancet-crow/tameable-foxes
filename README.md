@@ -14,7 +14,7 @@
 
 **So, you wonder how to get a cute fox?**
 
-- Tame them with using glow berries (Can be changed in the config)  
+- Tame them using glow berries (Item can be changed in the config)  
   **or**
 - You can breed them with sweet berries and the baby will trust you if the config is enabled. (True by Default)
 
@@ -23,15 +23,16 @@
 ## 🔍 F.A.Q
 
 - **Q: Does it work with Vulpine?**
-
   - **A:** I'm sure it will not. You'll have to choose between them, sorry.
 
-- **Q: Will it work with any fox-related mod?**
+#
 
+- **Q: Will it work with any fox-related mod?**
   - **A:** It can only be figured out by testing, feel free to open any issue if you find a incompatibility!
 
-- **Q: I have found a bug or incompatibility with this mod!**
+#
 
+- **Q: I have found a bug or incompatibility with this mod!**
   - **A:** Open an issue on [GitHub](https://github.com/Lancet-crow/tameable-foxes/issues/new), please. I'll try to help you if its possible.
 
 ---
