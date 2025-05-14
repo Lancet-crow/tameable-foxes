@@ -1,0 +1,22 @@
+{
+  "tameable-foxes.config.foxTamingItems": "Tilki Evcilleştirme İtemleri",
+  "tameable-foxes.config.foxTamingItems.desc": "Tilki evcilleştirmek için gereken itemleri değiştir veya ekle.",
+
+  "tameable-foxes.config.foxBreedingItems": "Tilki Çifleştirme İtemleri",
+  "tameable-foxes.config.foxBreedingItems.desc": "Tilki çiftleştirmek için gereken itemleri değiştir veya ekle.",
+
+  "tameable-foxes.config.foxesAttackWithOwner": "Tilkiler Sahibiyle Saldırır",
+  "tameable-foxes.config.foxesAttackWithOwner.desc": "Eğer true ise, tilkiler sahibinin vurduğu moblara saldırır.",
+
+  "tameable-foxes.config.foxesTameDirectly": "Tilkiler Direk Evcilleştirilebilir",
+  "tameable-foxes.config.foxesTameDirectly.desc": "Eğer false ise, yalnızca çiftleştirilme sonucunda doğan tilkiler evcilleşir.",
+
+  "tameable-foxes.config.foxesTamingChance": "Tilki Çiftleşme Şansı",
+  "tameable-foxes.config.foxesTamingChance.desc": "0 = Çiftleşemez\n1 = Tek Seferde Çiftleşir",
+
+  "tameable-foxes.config.foxesCanIgnoreMobGriefingRule": "Tilkiler mobGriefing Kuralını Umursamayabilir",
+  "tameable-foxes.config.foxesCanIgnoreMobGriefingRule.desc": "Eğer true ise, tilkiler /gamerule mobGriefing false olsa bile ağızlarına item alabilirler.",
+
+  "tameable-foxes.config.foxesTrustOnBorn": "Tilkiler Doğumda Evcilleşir",
+  "tameable-foxes.config.foxesTrustOnBorn.desc": "Eğer true ise, iki tilki çiftleştirildiğinde doğan bebek evcilleşmiş olur."
+}

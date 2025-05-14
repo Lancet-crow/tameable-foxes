@@ -33,13 +33,17 @@ public class TameableFoxesConfig extends Config {
     public static List<Item> FOX_TAMING_ITEMS = List.of();
     public static List<Item> FOX_BREEDING_ITEMS = List.of();
 
+    @RequiresAction(action = Action.RESTART)
+    public boolean foxesAttackWithOwner = true;
+
     public boolean foxesTameDirectly = true;
 
     @ValidatedFloat.Restrict(min = 0f, max = 1f, type = ValidatedNumber.WidgetType.SLIDER)
     public float foxesTamingChance = 0.3f;
 
-    @RequiresAction(action = Action.RESTART)
-    public boolean foxesCanAttackWithOwner = true;
+    public boolean foxesCanIgnoreMobGriefingRule = false;
+
+    public boolean foxesTrustOnBorn = true;
 
     public static Stream<ItemStack> getFoxTamingItemStacks(){
         Stream<ItemStack> foxTamingItemStacks = Stream.<ItemStack>builder().build();

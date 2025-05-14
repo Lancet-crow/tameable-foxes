@@ -30,14 +30,22 @@ public class CalmDownDogMixin {
                         foxEntity.goalSelector.getRunningGoals().anyMatch(goal ->
                                 goal.getGoal() instanceof TrackTargetGoal) && !world.isClient()) {
                     foxEntity.getNavigation().stop();
+                foxEntity.getEntityWorld().sendEntityStatus(foxEntity, EntityStatuses.ADD_POSITIVE_PLAYER_REACTION_PARTICLES);
+                if (owner.equals(player.getUuid())) {
                     foxEntity.setAggressive(false);
                     foxEntity.setTarget(null);
-                    foxEntity.goalSelector.getRunningGoals().forEachOrdered(goal -> {
-                        if (goal.getGoal() instanceof TrackTargetGoal trackTargetGoal){
-                            trackTargetGoal.stop();
-                        }
-                    });
+                    foxEntity.setAttacker(null);
+                    foxEntity.getNavigation().stop();
+                    if (foxEntity.goalSelector.getRunningGoals().anyMatch(goal ->
+                            goal.getGoal() instanceof TrackTargetGoal) && !world.isClient()){
+                        foxEntity.goalSelector.getRunningGoals().forEachOrdered(goal -> {
+                            if (goal.getGoal() instanceof TrackTargetGoal trackTargetGoal){
+                                trackTargetGoal.stop();
+                            }
+                        });
+                    }
                 }
+
                 player.swingHand(Hand.MAIN_HAND, !world.isClient);
                 cil.setReturnValue(ActionResult.CONSUME);
                 cil.cancel();
