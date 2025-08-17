@@ -1,7 +1,6 @@
 package lancet_.tameable_foxes.mixin.compat;
 
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ai.goal.TrackTargetGoal;
 import net.minecraft.entity.mob.Angerable;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.FoxEntity;

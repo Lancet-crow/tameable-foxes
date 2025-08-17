@@ -15,16 +15,20 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(TrackTargetGoal.class)
 public abstract class FoxTrackTargetGoal {
-    @Shadow @Final protected MobEntity mob;
+    @Shadow
+    @Final
+    protected MobEntity mob;
+    @Shadow
+    @Nullable
+    protected LivingEntity target;
 
-    @Shadow protected abstract boolean canTrack(@Nullable LivingEntity target, TargetPredicate targetPredicate);
-
-    @Shadow @Nullable protected LivingEntity target;
+    @Shadow
+    protected abstract boolean canTrack(@Nullable LivingEntity target, TargetPredicate targetPredicate);
 
     @Inject(method = "shouldContinue", at = @At("HEAD"), cancellable = true)
-    private void checkIfFoxAndStopIfCant(CallbackInfoReturnable<Boolean> cir){
-        if (this.mob instanceof FoxEntity){
-            if (!canTrack(this.target, TargetPredicate.DEFAULT)){
+    private void checkIfFoxAndStopIfCant(CallbackInfoReturnable<Boolean> cir) {
+        if (this.mob instanceof FoxEntity) {
+            if (!canTrack(this.target, TargetPredicate.DEFAULT)) {
                 cir.setReturnValue(false);
             }
         }

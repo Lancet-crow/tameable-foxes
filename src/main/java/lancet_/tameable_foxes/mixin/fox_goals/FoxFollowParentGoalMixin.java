@@ -16,8 +16,8 @@ public class FoxFollowParentGoalMixin {
     private FoxEntity fox;
 
     @Inject(method = "canStart", at = @At("HEAD"), cancellable = true)
-    private void tameable_foxes$canStart(CallbackInfoReturnable<Boolean> cir){
-        if (this.fox.isSitting()){
+    private void tameable_foxes$canStart(CallbackInfoReturnable<Boolean> cir) {
+        if (this.fox.isSitting()) {
             cir.setReturnValue(false);
             cir.cancel();
         }

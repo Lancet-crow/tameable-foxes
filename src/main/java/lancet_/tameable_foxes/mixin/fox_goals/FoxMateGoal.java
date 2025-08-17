@@ -5,7 +5,6 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import lancet_.tameable_foxes.TameableFoxesConfig;
 import lancet_.tameable_foxes.TameableTricksInterface;
 import net.minecraft.entity.passive.FoxEntity;
-import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -19,16 +18,18 @@ import static net.minecraft.entity.passive.TameableEntity.OWNER_UUID;
 public class FoxMateGoal {
 
 
-    @Shadow(aliases = "field_17973") @Final private FoxEntity fox;
+    @Shadow(aliases = "field_17973")
+    @Final
+    private FoxEntity fox;
 
     @WrapOperation(method = "breed",
             at = @At(value = "INVOKE",
                     target = "Lnet/minecraft/entity/passive/FoxEntity;addTrustedUuid(Ljava/util/UUID;)V"))
-    private void checkConfigValue(FoxEntity instance, UUID uuid, Operation<Void> original){
+    private void checkConfigValue(FoxEntity instance, UUID uuid, Operation<Void> original) {
         if (TameableFoxesConfig.config.foxesTrustOnBorn) {
             original.call(instance, uuid);
-            TameableTricksInterface ttInterface = ((TameableTricksInterface)(instance));
-            if (instance.getDataTracker().get(OWNER_UUID).isEmpty() && instance.getDataTracker().get(ttInterface.getOwnerTrackedData()).isPresent()){
+            TameableTricksInterface ttInterface = ((TameableTricksInterface) (instance));
+            if (instance.getDataTracker().get(OWNER_UUID).isEmpty() && instance.getDataTracker().get(ttInterface.getOwnerTrackedData()).isPresent()) {
                 ttInterface.getTame().setTamed(true);
                 ttInterface.getTame().setOwnerUuid(instance.getDataTracker().get(ttInterface.getOwnerTrackedData()).orElse(null));
             }

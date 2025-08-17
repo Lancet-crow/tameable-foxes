@@ -15,26 +15,28 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(TemptGoal.class)
 public class FoxTemptGoalMixin {
-    @Shadow @Final protected PathAwareEntity mob;
+    @Shadow
+    @Final
+    protected PathAwareEntity mob;
 
     @Inject(method = "canStart", at = @At("HEAD"), cancellable = true)
-    private void foxShouldStopIfTamed(CallbackInfoReturnable<Boolean> cir){
-        if (this.mob instanceof FoxEntity fox && ((TameableEntity) (Object) fox).isTamed()){
+    private void foxShouldStopIfTamed(CallbackInfoReturnable<Boolean> cir) {
+        if (this.mob instanceof FoxEntity fox && ((TameableEntity) (Object) fox).isTamed()) {
             cir.setReturnValue(false);
         }
     }
 
     @ModifyReturnValue(method = "canStart", at = @At("RETURN"))
-    private boolean notStartIfConfigIsOff(boolean original){
+    private boolean notStartIfConfigIsOff(boolean original) {
         return original && TameableFoxesConfig.config.untamedFoxesCanBeTempted;
     }
 
     @Inject(method = "shouldContinue", at = @At("HEAD"), cancellable = true)
-    private void foxShouldStopWhenSatOrConfigIsOff(CallbackInfoReturnable<Boolean> cir){
-        if (this.mob instanceof FoxEntity fox && (fox.isSitting() || ((TameableEntity) (Object) fox).isTamed())){
+    private void foxShouldStopWhenSatOrConfigIsOff(CallbackInfoReturnable<Boolean> cir) {
+        if (this.mob instanceof FoxEntity fox && (fox.isSitting() || ((TameableEntity) (Object) fox).isTamed())) {
             cir.setReturnValue(false);
         }
-        if (!TameableFoxesConfig.config.untamedFoxesCanBeTempted){
+        if (!TameableFoxesConfig.config.untamedFoxesCanBeTempted) {
             cir.setReturnValue(false);
         }
     }

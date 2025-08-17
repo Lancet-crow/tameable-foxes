@@ -16,12 +16,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(PetAnimation.class)
 public class NEAPetAnimationMixin {
-    @Shadow private Entity targetPet;
+    @Shadow
+    private Entity targetPet;
 
     @Inject(method = "isValid", at = @At("TAIL"), cancellable = true)
     public void allowPettingFoxes(AbstractClientPlayerEntity entity, PlayerData data, CallbackInfoReturnable<Boolean> cir,
-                                  @Local EntityHitResult entHit){
-        if (entHit != null && entHit.getEntity().getType() == EntityType.FOX){
+                                  @Local EntityHitResult entHit) {
+        if (entHit != null && entHit.getEntity().getType() == EntityType.FOX) {
             AnimalEntity pet = (AnimalEntity) entHit.getEntity();
             double dif = pet.getY() - entity.getY();
             if (Math.abs(dif) < 0.6) {

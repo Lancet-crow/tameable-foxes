@@ -1,9 +1,12 @@
 {
   "tameable-foxes.config.foxTamingItems": "Fox Taming Items",
-  "tameable-foxes.config.foxTamingItems.desc": "Change or add items that is needed to tame a fox.",
+  "tameable-foxes.config.foxTamingItems.desc": "Change or add the items required to tame a fox.",
 
   "tameable-foxes.config.foxBreedingItems": "Fox Breeding Items",
-  "tameable-foxes.config.foxBreedingItems.desc": "Change or add items that is needed to breed a fox.",
+  "tameable-foxes.config.foxBreedingItems.desc": "Change or add the items required to breed a fox.",
+
+  "tameable-foxes.config.itemsRestrictedToPick": "Item Pickup Blacklist",
+  "tameable-foxes.config.itemsRestrictedToPick.desc": "Prevents foxes from picking up any items listed here in their mouth.",
 
   "tameable-foxes.config.foxesAttackWithOwner": "Foxes Attack with Owner",
   "tameable-foxes.config.foxesAttackWithOwner.desc": "If true, foxes will attack the mobs owner hits.",
@@ -18,5 +21,11 @@
   "tameable-foxes.config.foxesCanIgnoreMobGriefingRule.desc": "If true, foxes will still pick items even if /gamerule mobGriefing set to false.",
 
   "tameable-foxes.config.foxesTrustOnBorn": "Foxes Trust on Born",
-  "tameable-foxes.config.foxesTrustOnBorn.desc": "If true, when two foxed are bred, the baby will directly trust you and be tamed."
+  "tameable-foxes.config.foxesTrustOnBorn.desc": "If true, when two foxed are bred, the baby will directly trust you and be tamed.",
+
+  "tameable-foxes.config.untamedFoxesCanBeTempted": "Untamed Foxes Can Be Tempted",
+  "tameable-foxes.config.untamedFoxesCanBeTempted.desc": "If true, untamed foxes will follow you when you hold taming/breeding items of Foxes.",
+
+  "tameable-foxes.config.untamedWolvesAttackTamedFoxes": "Untamed Wolves Attack Tamed Foxes",
+  "tameable-foxes.config.untamedWolvesAttackTamedFoxes.desc": "If false, wolves will no longer attack any foxes that are tamed."
 }

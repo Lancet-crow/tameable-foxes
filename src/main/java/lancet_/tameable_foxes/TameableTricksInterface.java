@@ -11,8 +11,10 @@ import java.util.UUID;
 
 public interface TameableTricksInterface extends Angerable {
     GoalSelector getFoxGoalSelector();
-    void setBegging(boolean begging);
+
     boolean isBegging();
+
+    void setBegging(boolean begging);
 
     boolean canAttackWithOwner(LivingEntity target, LivingEntity owner);
 

@@ -16,7 +16,7 @@ public abstract class TameableEntityMixin implements TameableTricksInterface {
 
     @Inject(method = "canAttackWithOwner", at = @At("RETURN"), cancellable = true)
     public void fox_wantsToAttack(LivingEntity target, LivingEntity owner, CallbackInfoReturnable<Boolean> cir) {
-        if ((AnimalEntity) (Object) this instanceof FoxEntity){
+        if ((AnimalEntity) (Object) this instanceof FoxEntity) {
             cir.setReturnValue(cir.getReturnValue() && TameableFoxesConfig.config.foxesAttackWithOwner);
         }
     }

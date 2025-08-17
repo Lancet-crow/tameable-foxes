@@ -12,12 +12,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = FoxEntity.MoveToHuntGoal.class, priority = 1001)
 public class FoxMoveToHuntGoalMixin {
-    @Shadow @Final
+    @Shadow
+    @Final
     FoxEntity field_17995;
 
     @Inject(method = "canStart", at = @At("HEAD"), cancellable = true)
-    private void tameable_foxes$canStart(CallbackInfoReturnable<Boolean> cir){
-        if (((TameableEntity) (Object) field_17995).isTamed()){
+    private void tameable_foxes$canStart(CallbackInfoReturnable<Boolean> cir) {
+        if (((TameableEntity) (Object) field_17995).isTamed()) {
             cir.setReturnValue(false);
             cir.cancel();
         }
