@@ -14,7 +14,10 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.mob.*;
+import net.minecraft.entity.mob.Angerable;
+import net.minecraft.entity.mob.CreeperEntity;
+import net.minecraft.entity.mob.GhastEntity;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -48,64 +51,73 @@ import static net.minecraft.entity.passive.TameableEntity.OWNER_UUID;
 
 @Mixin(value = FoxEntity.class, priority = 1001)
 public abstract class FoxEntityMixin extends AnimalEntity implements Tameable, TameableTricksInterface, Angerable {
-    @Shadow protected abstract void eat(PlayerEntity player, Hand hand, ItemStack stack);
-
-    @Shadow public abstract boolean isSitting();
-
-    @Shadow public abstract boolean isBreedingItem(ItemStack stack);
-
-    @Shadow public abstract boolean isSleeping();
-
-    @Shadow public abstract void setSleeping(boolean sleeping);
-
-    @Shadow @Final public static TrackedData<Optional<UUID>> OWNER;
-
-    @Shadow public abstract void setSitting(boolean sitting);
-
-    @Shadow public abstract void setWalking(boolean walking);
-
-    @Shadow public abstract void playAmbientSound();
-
-    @Shadow abstract void addTrustedUuid(@Nullable UUID uuid);
-
-    @Shadow public abstract void setAggressive(boolean aggressive);
-
-    @Shadow public abstract boolean isAggressive();
-
-    @Unique private final TameableEntity tame;
-
     @Unique
     private static final TrackedData<Boolean> BEGGING = DataTracker.registerData(FoxEntityMixin.class, TrackedDataHandlerRegistry.BOOLEAN);
-
+    @Unique
+    private static final TrackedData<Integer> ANGER_TIME = DataTracker.registerData(FoxEntityMixin.class, TrackedDataHandlerRegistry.INTEGER);
+    @Unique
+    private static final UniformIntProvider ANGER_TIME_RANGE = TimeHelper.betweenSeconds(20, 39);
+    @Shadow
+    @Final
+    public static TrackedData<Optional<UUID>> OWNER;
+    @Unique
+    private final TameableEntity tame;
     @Unique
     @Nullable
     private UUID angryAt;
 
-    @Unique
-    private static final TrackedData<Integer> ANGER_TIME = DataTracker.registerData(FoxEntityMixin.class, TrackedDataHandlerRegistry.INTEGER);
-
-    @Unique
-    private static final UniformIntProvider ANGER_TIME_RANGE = TimeHelper.betweenSeconds(20, 39);
-
     protected FoxEntityMixin(EntityType<? extends AnimalEntity> entityType, World world) {
         super(entityType, world);
-        this.tame = (TameableEntity) (Object)this;
+        this.tame = (TameableEntity) (Object) this;
     }
 
+    @Shadow
+    protected abstract void eat(PlayerEntity player, Hand hand, ItemStack stack);
+
+    @Shadow
+    public abstract boolean isSitting();
+
+    @Shadow
+    public abstract void setSitting(boolean sitting);
+
+    @Shadow
+    public abstract boolean isBreedingItem(ItemStack stack);
+
+    @Shadow
+    public abstract boolean isSleeping();
+
+    @Shadow
+    public abstract void setSleeping(boolean sleeping);
+
+    @Shadow
+    public abstract void setWalking(boolean walking);
+
+    @Shadow
+    public abstract void playAmbientSound();
+
+    @Shadow
+    abstract void addTrustedUuid(@Nullable UUID uuid);
+
+    @Shadow
+    public abstract boolean isAggressive();
+
+    @Shadow
+    public abstract void setAggressive(boolean aggressive);
+
     @Inject(method = "readCustomDataFromNbt", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/passive/FoxEntity;setSleeping(Z)V"))
-    private void checkIfPreviousOwnerExists(NbtCompound nbt, CallbackInfo ci){
-        if (this.getTame().getOwner() == null && this.getDataTracker().get(OWNER).isPresent()){
+    private void checkIfPreviousOwnerExists(NbtCompound nbt, CallbackInfo ci) {
+        if (this.getTame().getOwner() == null && this.getDataTracker().get(OWNER).isPresent()) {
             this.getTame().setTamed(true);
             this.getTame().setOwnerUuid(this.getDataTracker().get(OWNER).orElse(null));
         }
-        if (this.getTame().getOwner() != null && this.getDataTracker().get(OWNER).isEmpty()){
+        if (this.getTame().getOwner() != null && this.getDataTracker().get(OWNER).isEmpty()) {
             this.addTrustedUuid(this.getOwnerUuid());
         }
     }
 
     @Unique
-    public TameableEntity getTame(){
-        return this.tame == null ? (TameableEntity) (Object)this : this.tame;
+    public TameableEntity getTame() {
+        return this.tame == null ? (TameableEntity) (Object) this : this.tame;
     }
 
     @Override
@@ -133,10 +145,9 @@ public abstract class FoxEntityMixin extends AnimalEntity implements Tameable, T
             } else {
                 ActionResult actionResult = super.interactMob(player, hand);
                 if ((!actionResult.isAccepted() || this.isBaby()) && getTame().isOwner(player)) {
-                    if (this.isSleeping()){
+                    if (this.isSleeping()) {
                         this.setSleeping(false);
-                    }
-                    else{
+                    } else {
                         this.setSitting(!this.isSitting());
                     }
                     this.getNavigation().stop();
@@ -167,8 +178,8 @@ public abstract class FoxEntityMixin extends AnimalEntity implements Tameable, T
     }
 
     @WrapMethod(method = "setSitting")
-    public void tameableFoxes$setSitting(boolean sitting, Operation<Void> original){
-        if (sitting){
+    public void tameableFoxes$setSitting(boolean sitting, Operation<Void> original) {
+        if (sitting) {
             this.setForwardSpeed(0f);
             this.setWalking(false);
         }
@@ -178,7 +189,7 @@ public abstract class FoxEntityMixin extends AnimalEntity implements Tameable, T
     }
 
     @WrapMethod(method = "isSitting")
-    public boolean tameableFoxes$isSitting(Operation<Boolean> original){
+    public boolean tameableFoxes$isSitting(Operation<Boolean> original) {
         return this.getTame().isInSittingPose();
     }
 
@@ -195,39 +206,39 @@ public abstract class FoxEntityMixin extends AnimalEntity implements Tameable, T
     }
 
     @WrapMethod(method = "onPlayerSpawnedChild")
-    private void ownerWithSpawnEggs(PlayerEntity player, MobEntity child, Operation<Void> original){
-        if (child instanceof FoxEntity fox){
-            if (getTame().isTamed() || TameableFoxesConfig.config.foxesTameDirectly){
+    private void ownerWithSpawnEggs(PlayerEntity player, MobEntity child, Operation<Void> original) {
+        if (child instanceof FoxEntity fox) {
+            if (getTame().isTamed() || TameableFoxesConfig.config.foxesTameDirectly) {
                 fox.getDataTracker().set(FoxEntity.OWNER, Optional.of(player.getUuid()));
             }
         }
     }
 
     @Inject(method = "initDataTracker", at = @At("TAIL"))
-    private void injectTrackers(CallbackInfo ci){
+    private void injectTrackers(CallbackInfo ci) {
         this.dataTracker.startTracking(BEGGING, false);
         this.dataTracker.startTracking(ANGER_TIME, 0);
     }
 
     @Inject(method = "readCustomDataFromNbt", at = @At("TAIL"))
-    private void readAngerTime(NbtCompound nbt, CallbackInfo ci){
+    private void readAngerTime(NbtCompound nbt, CallbackInfo ci) {
         this.readAngerFromNbt(this.getWorld(), nbt);
     }
 
     @Inject(method = "writeCustomDataToNbt", at = @At("TAIL"))
-    private void writeAngerTime(NbtCompound nbt, CallbackInfo ci){
+    private void writeAngerTime(NbtCompound nbt, CallbackInfo ci) {
         this.writeAngerToNbt(nbt);
     }
 
     @Inject(method = "tickMovement", at = @At("TAIL"))
-    private void tickAnger(CallbackInfo ci){
+    private void tickAnger(CallbackInfo ci) {
         if (!this.getWorld().isClient) {
-            this.tickAngerLogic((ServerWorld)this.getWorld(), true);
+            this.tickAngerLogic((ServerWorld) this.getWorld(), true);
         }
     }
 
     @Unique
-    private boolean isTamingItem(Item item){
+    private boolean isTamingItem(Item item) {
         return TameableFoxesConfig.FOX_TAMING_ITEMS.contains(item);
     }
 
@@ -242,7 +253,7 @@ public abstract class FoxEntityMixin extends AnimalEntity implements Tameable, T
             return false;
         } else if (!(other instanceof FoxEntity otherFox)) {
             return false;
-        } else if (((TameableEntity)(Object) otherFox).isTamed() != getTame().isTamed()) {
+        } else if (((TameableEntity) (Object) otherFox).isTamed() != getTame().isTamed()) {
             return false;
         } else {
             return !otherFox.isSitting() && !this.isSitting() && this.isInLove() && otherFox.isInLove();
@@ -250,7 +261,7 @@ public abstract class FoxEntityMixin extends AnimalEntity implements Tameable, T
     }
 
     @ModifyReturnValue(method = "canPickupItem", at = @At("TAIL"))
-    private boolean restrictPickItemIfShould(boolean original, @Local(argsOnly = true) ItemStack stack){
+    private boolean restrictPickItemIfShould(boolean original, @Local(argsOnly = true) ItemStack stack) {
         return original && !TameableFoxesConfig.ITEMS_RESTRICTED_TO_PICK.contains(stack.getItem());
     }
 
@@ -291,18 +302,18 @@ public abstract class FoxEntityMixin extends AnimalEntity implements Tameable, T
     }
 
     @Override
-    public GoalSelector getFoxGoalSelector(){
+    public GoalSelector getFoxGoalSelector() {
         return this.goalSelector;
     }
 
     @Override
-    public void setBegging(boolean begging){
-        this.dataTracker.set(BEGGING, begging);
+    public boolean isBegging() {
+        return this.dataTracker.get(BEGGING);
     }
 
     @Override
-    public boolean isBegging(){
-        return this.dataTracker.get(BEGGING);
+    public void setBegging(boolean begging) {
+        this.dataTracker.set(BEGGING, begging);
     }
 
     @Nullable
@@ -312,7 +323,7 @@ public abstract class FoxEntityMixin extends AnimalEntity implements Tameable, T
     }
 
     @Override
-    public EntityView method_48926(){
+    public EntityView method_48926() {
         return this.getWorld();
     }
 
@@ -322,12 +333,12 @@ public abstract class FoxEntityMixin extends AnimalEntity implements Tameable, T
             return false;
         } else if (target instanceof WolfEntity wolfEntity) {
             return !wolfEntity.isTamed() || wolfEntity.getOwner() != owner;
-        } else if (target instanceof PlayerEntity && owner instanceof PlayerEntity && !((PlayerEntity)owner).shouldDamagePlayer((PlayerEntity)target)) {
+        } else if (target instanceof PlayerEntity && owner instanceof PlayerEntity && !((PlayerEntity) owner).shouldDamagePlayer((PlayerEntity) target)) {
             return false;
         } else {
-            return target instanceof AbstractHorseEntity && ((AbstractHorseEntity)target).isTame()
+            return target instanceof AbstractHorseEntity && ((AbstractHorseEntity) target).isTame()
                     ? false
-                    : !(target instanceof TameableEntity) || !((TameableEntity)target).isTamed();
+                    : !(target instanceof TameableEntity) || !((TameableEntity) target).isTamed();
         }
     }
 
@@ -340,16 +351,16 @@ public abstract class FoxEntityMixin extends AnimalEntity implements Tameable, T
     @Override
     public void setAngryAt(@Nullable UUID angryAt) {
         this.angryAt = angryAt;
-        if (angryAt != null){
+        if (angryAt != null) {
             this.setAggressive(true);
         }
     }
 
     @Override
-    public void stopAnger(){
-        this.setAttacker((LivingEntity)null);
-        this.setAngryAt((UUID)null);
-        this.setTarget((LivingEntity)null);
+    public void stopAnger() {
+        this.setAttacker((LivingEntity) null);
+        this.setAngryAt((UUID) null);
+        this.setTarget((LivingEntity) null);
         this.setAngerTime(0);
         this.setAggressive(false);
     }
@@ -370,7 +381,7 @@ public abstract class FoxEntityMixin extends AnimalEntity implements Tameable, T
     }
 
     @Inject(method = "getAmbientSound", at = @At("HEAD"), cancellable = true)
-    public void addAmbientAggroWhenHasAngerTime(CallbackInfoReturnable<SoundEvent> cir){
+    public void addAmbientAggroWhenHasAngerTime(CallbackInfoReturnable<SoundEvent> cir) {
         if (this.hasAngerTime()) {
             cir.setReturnValue(SoundEvents.ENTITY_FOX_AGGRO);
         }
@@ -378,7 +389,7 @@ public abstract class FoxEntityMixin extends AnimalEntity implements Tameable, T
 
     @Override
     public boolean tryAttack(Entity target) {
-        boolean bl = target.damage(this.getDamageSources().mobAttack(this), (int)this.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE));
+        boolean bl = target.damage(this.getDamageSources().mobAttack(this), (int) this.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE));
         if (bl) {
             this.applyDamageEffects(this, target);
         }

@@ -1,7 +1,6 @@
 package lancet_.tameable_foxes.mixin.compat;
 
 import lancet_.tameable_foxes.TameableTricksInterface;
-import lancet_.tameable_foxes.mixin.TameableEntityMixin;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.EscapeDangerGoal;
@@ -21,12 +20,12 @@ import java.util.Optional;
 @Mixin(Hooks.class)
 public class CompanionHooksMixin {
     @Inject(method = "teleportWithRandomOffset",
-    at = @At(value = "RETURN"))
-    private static void stopFoxFromFleeingAfterTeleport(LivingEntity entity, World level, BlockPos blockPos, Boolean canFly, Entity avoidColliding, CallbackInfoReturnable<Optional<Vec3d>> cir){
-        if (cir.getReturnValue().isPresent()){
-            if (entity instanceof FoxEntity fox){
+            at = @At(value = "RETURN"))
+    private static void stopFoxFromFleeingAfterTeleport(LivingEntity entity, World level, BlockPos blockPos, Boolean canFly, Entity avoidColliding, CallbackInfoReturnable<Optional<Vec3d>> cir) {
+        if (cir.getReturnValue().isPresent()) {
+            if (entity instanceof FoxEntity fox) {
                 ((TameableTricksInterface) fox).getFoxGoalSelector().getGoals().forEach(goal -> {
-                    if (goal.getGoal() instanceof FleeEntityGoal<?>){
+                    if (goal.getGoal() instanceof FleeEntityGoal<?>) {
                         goal.getGoal().stop();
                     } else if (goal.getGoal() instanceof EscapeDangerGoal escGoal) {
                         fox.setAttacker(null);

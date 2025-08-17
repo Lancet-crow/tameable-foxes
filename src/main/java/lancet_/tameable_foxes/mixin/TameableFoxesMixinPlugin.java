@@ -11,7 +11,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Supplier;
 
-/** :irritatered: */
+/**
+ * :irritatered:
+ */
 public final class TameableFoxesMixinPlugin implements IMixinConfigPlugin {
     private static final Supplier<Boolean> TRUE = () -> true;
 

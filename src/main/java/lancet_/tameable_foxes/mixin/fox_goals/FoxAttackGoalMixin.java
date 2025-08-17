@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(FoxEntity.AttackGoal.class)
 public class FoxAttackGoalMixin {
     @ModifyExpressionValue(method = "canStart", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/passive/FoxEntity;isWalking()Z"))
-    private boolean canStartIfWalking(boolean original){
+    private boolean canStartIfWalking(boolean original) {
         return false;
     }
 }

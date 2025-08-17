@@ -10,12 +10,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(FoxEntity.AvoidDaylightGoal.class)
 public class FoxAvoidDaylightGoalMixin {
-    @Shadow @Final
+    @Shadow
+    @Final
     FoxEntity field_17991;
 
     @Inject(method = "canStart", at = @At("HEAD"), cancellable = true)
-    private void tameable_foxes$canStart(CallbackInfoReturnable<Boolean> cir){
-        if (this.field_17991.isSitting()){
+    private void tameable_foxes$canStart(CallbackInfoReturnable<Boolean> cir) {
+        if (this.field_17991.isSitting()) {
             cir.setReturnValue(false);
             cir.cancel();
         }

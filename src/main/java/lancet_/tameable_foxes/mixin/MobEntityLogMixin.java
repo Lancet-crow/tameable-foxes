@@ -15,8 +15,8 @@ public abstract class MobEntityLogMixin {
     @WrapOperation(method = "tickMovement",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/GameRules;getBoolean(Lnet/minecraft/world/GameRules$Key;)Z"))
     private boolean checkFoxIgnoreMobGriefingRule(GameRules instance, GameRules.Key<GameRules.BooleanRule> rule,
-                                                  Operation<Boolean> original){
-        if (((MobEntity)(Object) this) instanceof FoxEntity && TameableFoxesConfig.config.foxesCanIgnoreMobGriefingRule){
+                                                  Operation<Boolean> original) {
+        if (((MobEntity) (Object) this) instanceof FoxEntity && TameableFoxesConfig.config.foxesCanIgnoreMobGriefingRule) {
             return true;
         }
         return original.call(instance, rule);

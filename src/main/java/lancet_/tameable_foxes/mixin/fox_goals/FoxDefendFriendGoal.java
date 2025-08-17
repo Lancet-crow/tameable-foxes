@@ -18,14 +18,18 @@ import java.util.function.Predicate;
 
 @Mixin(FoxEntity.DefendFriendGoal.class)
 public abstract class FoxDefendFriendGoal extends ActiveTargetGoal<LivingEntity> {
-    @Shadow(aliases = "field_17965") @Final
+    @Shadow(aliases = "field_17965")
+    @Final
     FoxEntity fox;
 
-    @Shadow private @Nullable LivingEntity friend;
+    @Shadow
+    private @Nullable LivingEntity friend;
 
-    @Shadow private @Nullable LivingEntity offender;
+    @Shadow
+    private @Nullable LivingEntity offender;
 
-    @Shadow private int lastAttackedTime;
+    @Shadow
+    private int lastAttackedTime;
 
     public FoxDefendFriendGoal(MobEntity mob, Class<LivingEntity> targetClass, boolean checkVisibility, Predicate<LivingEntity> targetPredicate) {
         super(mob, targetClass, checkVisibility, targetPredicate);
@@ -33,17 +37,17 @@ public abstract class FoxDefendFriendGoal extends ActiveTargetGoal<LivingEntity>
 
     @Inject(method = "canStart",
             at = @At("HEAD"), cancellable = true)
-    private void checkIfOwnerWasAttacked(CallbackInfoReturnable<Boolean> cir){
+    private void checkIfOwnerWasAttacked(CallbackInfoReturnable<Boolean> cir) {
         TameableEntity tame = (TameableEntity) (Object) fox;
         assert tame != null;
-        if (!TameableFoxesConfig.config.foxesAttackWithOwner){
+        if (!TameableFoxesConfig.config.foxesAttackWithOwner) {
             cir.setReturnValue(false);
             return;
         }
-        if (tame.isTamed() && tame.getOwner() != null){
+        if (tame.isTamed() && tame.getOwner() != null) {
             this.friend = tame.getOwner();
             this.offender = this.friend.getAttacker();
-            if (this.friend.getLastAttackedTime() != this.lastAttackedTime && this.canTrack(this.offender, this.targetPredicate)){
+            if (this.friend.getLastAttackedTime() != this.lastAttackedTime && this.canTrack(this.offender, this.targetPredicate)) {
                 cir.setReturnValue(true);
             }
         }

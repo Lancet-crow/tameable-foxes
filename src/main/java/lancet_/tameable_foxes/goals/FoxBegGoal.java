@@ -1,32 +1,28 @@
 package lancet_.tameable_foxes.goals;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Objects;
 
 import lancet_.tameable_foxes.TameableFoxesConfig;
 import lancet_.tameable_foxes.TameableTricksInterface;
 import net.minecraft.entity.ai.TargetPredicate;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.passive.FoxEntity;
-import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.EnumSet;
+import java.util.List;
+
 public class FoxBegGoal extends Goal {
     private final FoxEntity fox;
-    @Nullable
-    private PlayerEntity begFrom;
     private final World world;
     private final float begDistance;
-    private int timer;
     private final TargetPredicate validPlayerPredicate;
     private final List<ItemStack> attractiveItems;
+    @Nullable
+    private PlayerEntity begFrom;
+    private int timer;
 
     public FoxBegGoal(FoxEntity fox, float begDistance) {
         this.fox = fox;
@@ -54,19 +50,19 @@ public class FoxBegGoal extends Goal {
 
     @Override
     public void start() {
-        ((TameableTricksInterface)this.fox).setBegging(true);
+        ((TameableTricksInterface) this.fox).setBegging(true);
         this.timer = this.getTickCount(40 + this.fox.getRandom().nextInt(40));
     }
 
     @Override
     public void stop() {
-        ((TameableTricksInterface)this.fox).setBegging(false);
+        ((TameableTricksInterface) this.fox).setBegging(false);
         this.begFrom = null;
     }
 
     @Override
     public void tick() {
-        if (this.begFrom != null){
+        if (this.begFrom != null) {
             this.fox.getLookControl().lookAt(this.begFrom.getX(), this.begFrom.getEyeY(), this.begFrom.getZ(), 10.0F, this.fox.getMaxLookPitchChange());
         }
         this.timer--;
@@ -75,7 +71,7 @@ public class FoxBegGoal extends Goal {
     private boolean isAttractive(PlayerEntity player) {
         for (Hand hand : Hand.values()) {
             ItemStack itemStack = player.getStackInHand(hand);
-            if (attractiveItems.stream().anyMatch(attractiveStack -> attractiveStack.getItem().equals(itemStack.getItem()))){
+            if (attractiveItems.stream().anyMatch(attractiveStack -> attractiveStack.getItem().equals(itemStack.getItem()))) {
                 return true;
             }
         }

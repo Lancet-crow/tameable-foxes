@@ -11,12 +11,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(targets = "net.minecraft.entity.passive.FoxEntity$LookAtEntityGoal")
 public class FoxLookAtEntityGoal {
-    @Shadow @Final
+    @Shadow
+    @Final
     FoxEntity field_19261;
 
     @Inject(method = "canStart", at = @At("RETURN"), cancellable = true)
-    public void cantStartIfFoxBegging(CallbackInfoReturnable<Boolean> cir){
-        if (((TameableTricksInterface)this.field_19261).isBegging()){
+    public void cantStartIfFoxBegging(CallbackInfoReturnable<Boolean> cir) {
+        if (((TameableTricksInterface) this.field_19261).isBegging()) {
             cir.setReturnValue(false);
         }
     }

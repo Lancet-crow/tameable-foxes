@@ -11,7 +11,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(FoxEntity.SitDownAndLookAroundGoal.class)
 public class FoxSitDownAndLookAroundGoalMixin {
-    @Shadow @Final
+    @Shadow
+    @Final
     FoxEntity field_17986;
 
     @Inject(method = "canStart", at = @At("RETURN"), cancellable = true)
