@@ -23,7 +23,7 @@
   "tameable-foxes.config.foxesTrustOnBorn": "Tilkiler Doğumda Evcilleşir",
   "tameable-foxes.config.foxesTrustOnBorn.desc": "Eğer true ise, iki tilki çiftleştirildiğinde doğan bebek evcilleşmiş olur.",
 
-  "tameable-foxes.config.untamedFoxesCanBeTempted": "Evcilleştirilmemiş Tilkiler yemeği takip eder",
+  "tameable-foxes.config.untamedFoxesCanBeTempted": "Evcilleştirilmemiş Tilkiler Yemeği Takip Eder",
   "tameable-foxes.config.untamedFoxesCanBeTempted.desc": "Eğer true ise, evcilleştirilmemiş tilkiler Evcilleştirme/Çiftleştirme eşyalarını takip eder.",
 
   "tameable-foxes.config.untamedWolvesAttackTamedFoxes": "Evcilleştirilmemiş Kurtlar Evcilleştirilmiş Tilkilere Saldırır",
