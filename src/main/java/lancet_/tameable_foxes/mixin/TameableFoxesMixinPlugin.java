@@ -16,7 +16,10 @@ public final class TameableFoxesMixinPlugin implements IMixinConfigPlugin {
     private static final Supplier<Boolean> TRUE = () -> true;
 
     private static final Map<String, Supplier<Boolean>> CONDITIONS = ImmutableMap.of(
-            "lancet_.tameable_foxes.mixin.compat.CalmDownDogMixin", () -> FabricLoader.getInstance().isModLoaded("calmdowndog")
+            "lancet_.tameable_foxes.mixin.compat.CalmDownDogFoxMixin", () -> FabricLoader.getInstance().isModLoaded("calmdowndog"),
+            "lancet_.tameable_foxes.mixin.compat.NEAPetAnimationMixin", () -> FabricLoader.getInstance().isModLoaded("notenoughanimations"),
+            "lancet_.tameable_foxes.mixin.compat.CompanionHooksMixin", () -> FabricLoader.getInstance().isModLoaded("companion"),
+            "lancet_.tameable_foxes.mixin.compat.CompanionTargetGoalMixin", () -> FabricLoader.getInstance().isModLoaded("companion")
     );
 
     @Override

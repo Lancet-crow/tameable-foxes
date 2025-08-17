@@ -22,7 +22,6 @@ public class NEAPetAnimationMixin {
     public void allowPettingFoxes(AbstractClientPlayerEntity entity, PlayerData data, CallbackInfoReturnable<Boolean> cir,
                                   @Local EntityHitResult entHit){
         if (entHit != null && entHit.getEntity().getType() == EntityType.FOX){
-            //entity.sendMessage(Text.of("It works, but differently"), true);
             AnimalEntity pet = (AnimalEntity) entHit.getEntity();
             double dif = pet.getY() - entity.getY();
             if (Math.abs(dif) < 0.6) {

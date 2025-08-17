@@ -1,41 +1,37 @@
 package lancet_.tameable_foxes.mixin.fox_goals;
 
-import com.llamalad7.mixinextras.sugar.Local;
-import lancet_.tameable_foxes.MappingUtil;
-import lancet_.tameable_foxes.ReflectionUtil;
-import net.minecraft.entity.ai.goal.AnimalMateGoal;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import lancet_.tameable_foxes.TameableFoxesConfig;
+import lancet_.tameable_foxes.TameableTricksInterface;
 import net.minecraft.entity.passive.FoxEntity;
-import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.text.Text;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(targets = "net.minecraft.entity.passive.FoxEntity$MateGoal")
+import java.util.UUID;
+
+import static net.minecraft.entity.passive.TameableEntity.OWNER_UUID;
+
+@Mixin(FoxEntity.MateGoal.class)
 public class FoxMateGoal {
 
-    @Inject(method = "breed", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/passive/FoxEntity;addTrustedUuid(Ljava/util/UUID;)V", shift = At.Shift.AFTER))
-    private void injected(CallbackInfo ci, @Local FoxEntity foxEntity) {
-        PlayerEntity futureOwner;
-        AnimalMateGoal mateGoal = (AnimalMateGoal) (Object) this;
-        PlayerEntity thisFoxOwner = (PlayerEntity) ((TameableEntity) mateGoal.animal).getOwner();
-        PlayerEntity otherFoxOwner = (PlayerEntity) ((TameableEntity) mateGoal.mate).getOwner();
-        PlayerEntity lovingPlayer = mateGoal.mate.getLovingPlayer() != null ? mateGoal.mate.getLovingPlayer() : mateGoal.animal.getLovingPlayer();
-        if (thisFoxOwner == null){
-            if (otherFoxOwner == null){
-                futureOwner = lovingPlayer;
-            }
-            else{
-                futureOwner = otherFoxOwner;
+
+    @Shadow(aliases = "field_17973") @Final private FoxEntity fox;
+
+    @WrapOperation(method = "breed",
+            at = @At(value = "INVOKE",
+                    target = "Lnet/minecraft/entity/passive/FoxEntity;addTrustedUuid(Ljava/util/UUID;)V"))
+    private void checkConfigValue(FoxEntity instance, UUID uuid, Operation<Void> original){
+        if (TameableFoxesConfig.config.foxesTrustOnBorn) {
+            original.call(instance, uuid);
+            TameableTricksInterface ttInterface = ((TameableTricksInterface)(instance));
+            if (instance.getDataTracker().get(OWNER_UUID).isEmpty() && instance.getDataTracker().get(ttInterface.getOwnerTrackedData()).isPresent()){
+                ttInterface.getTame().setTamed(true);
+                ttInterface.getTame().setOwnerUuid(instance.getDataTracker().get(ttInterface.getOwnerTrackedData()).orElse(null));
             }
         }
-        else{
-            futureOwner = thisFoxOwner;
-        }
-        ReflectionUtil.invoke(foxEntity, "net.minecraft.class_1321",
-                "method_6170",
-                "(%s)V".formatted(MappingUtil.definitionToIntermediaryBytecodeName(PlayerEntity.class)),
-                void.class, new Class[]{PlayerEntity.class}, futureOwner);
     }
 }

@@ -25,3 +25,8 @@ accessible field net/minecraft/entity/passive/TameableEntity sitting Z
 accessible class net/minecraft/entity/passive/FoxEntity$AvoidDaylightGoal
 accessible class net/minecraft/entity/passive/FoxEntity$MoveToHuntGoal
 accessible class net/minecraft/entity/passive/FoxEntity$SitDownAndLookAroundGoal
+accessible class net/minecraft/entity/passive/FoxEntity$MateGoal
+accessible field net/minecraft/entity/passive/FoxEntity SITTING_FLAG I
+accessible field net/minecraft/entity/passive/TameableEntity OWNER_UUID Lnet/minecraft/entity/data/TrackedData;
+accessible class net/minecraft/entity/passive/FoxEntity$DefendFriendGoal
+accessible class net/minecraft/entity/passive/FoxEntity$AttackGoal

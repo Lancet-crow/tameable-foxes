@@ -30,11 +30,14 @@ public class TameableFoxesConfig extends Config {
             Identifier.tryParse("sweet_berries")
     ), ValidatedIdentifier.ofRegistry(Identifier.tryParse("sweet_berries"), Registries.ITEM));
 
+    public ValidatedList<Identifier> itemsRestrictedToPick = new ValidatedList<>(List.of(), ValidatedIdentifier.ofRegistry(Identifier.tryParse(""), Registries.ITEM));
+
     public static List<Item> FOX_TAMING_ITEMS = List.of();
     public static List<Item> FOX_BREEDING_ITEMS = List.of();
+    public static List<Item> ITEMS_RESTRICTED_TO_PICK = List.of();
 
     @RequiresAction(action = Action.RESTART)
-    public boolean foxesAttackWithOwner = true;
+    public boolean foxesAttackWithOwner = false;
 
     public boolean foxesTameDirectly = true;
 
@@ -44,6 +47,10 @@ public class TameableFoxesConfig extends Config {
     public boolean foxesCanIgnoreMobGriefingRule = false;
 
     public boolean foxesTrustOnBorn = true;
+
+    public boolean untamedFoxesCanBeTempted = false;
+
+    public boolean untamedWolvesAttackTamedFoxes = true;
 
     public static Stream<ItemStack> getFoxTamingItemStacks(){
         Stream<ItemStack> foxTamingItemStacks = Stream.<ItemStack>builder().build();
@@ -74,11 +81,13 @@ public class TameableFoxesConfig extends Config {
     public static void init() {
         FOX_TAMING_ITEMS = TameableFoxesConfig.config.foxTamingItems.stream().map(Registries.ITEM::get).toList();
         FOX_BREEDING_ITEMS = TameableFoxesConfig.config.foxBreedingItems.stream().map(Registries.ITEM::get).toList();
+        ITEMS_RESTRICTED_TO_PICK = TameableFoxesConfig.config.itemsRestrictedToPick.stream().map(Registries.ITEM::get).toList();
     }
 
     @Override
     public void onUpdateClient() {
         FOX_TAMING_ITEMS = TameableFoxesConfig.config.foxTamingItems.stream().map(Registries.ITEM::get).toList();
         FOX_BREEDING_ITEMS = TameableFoxesConfig.config.foxBreedingItems.stream().map(Registries.ITEM::get).toList();
+        ITEMS_RESTRICTED_TO_PICK = TameableFoxesConfig.config.itemsRestrictedToPick.stream().map(Registries.ITEM::get).toList();
     }
 }

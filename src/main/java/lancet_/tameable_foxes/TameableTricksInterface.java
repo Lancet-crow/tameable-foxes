@@ -1,5 +1,22 @@
 package lancet_.tameable_foxes;
 
-public interface TameableTricksInterface {
-    void setSittingValue(boolean sittingValue);
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.goal.GoalSelector;
+import net.minecraft.entity.data.TrackedData;
+import net.minecraft.entity.mob.Angerable;
+import net.minecraft.entity.passive.TameableEntity;
+
+import java.util.Optional;
+import java.util.UUID;
+
+public interface TameableTricksInterface extends Angerable {
+    GoalSelector getFoxGoalSelector();
+    void setBegging(boolean begging);
+    boolean isBegging();
+
+    boolean canAttackWithOwner(LivingEntity target, LivingEntity owner);
+
+    TameableEntity getTame();
+
+    TrackedData<Optional<UUID>> getOwnerTrackedData();
 }

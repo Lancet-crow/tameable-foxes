@@ -5,14 +5,21 @@
   "plugin": "lancet_.tameable_foxes.mixin.TameableFoxesMixinPlugin",
   "mixins": [
     "FoxEntityMixin",
+    "MobEntityLogMixin",
     "TameableEntityMixin",
-    "compat.CalmDownDogMixin",
+    "compat.CompanionHooksMixin",
+    "compat.CompanionTargetGoalMixin",
+    "compat.NEAPetAnimationMixin",
+    "fox_goals.FoxAttackGoalMixin",
     "fox_goals.FoxAvoidDaylightGoalMixin",
+    "fox_goals.FoxEscapeWhenNotAggroGoalMixin",
     "fox_goals.FoxFollowParentGoalMixin",
+    "fox_goals.FoxLookAtEntityGoal",
     "fox_goals.FoxMateGoal",
     "fox_goals.FoxMoveToHuntGoalMixin",
     "fox_goals.FoxSitDownAndLookAroundGoalMixin",
-    "fox_goals.FoxSitGoalMixin"
+    "fox_goals.FoxTemptGoalMixin",
+    "wolf.WolfEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1
