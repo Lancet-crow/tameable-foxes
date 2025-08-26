@@ -1,6 +1,7 @@
 package lancet_.tameable_foxes.fox_goals;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.block.LeavesBlock;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.pathing.EntityNavigation;
@@ -8,6 +9,7 @@ import net.minecraft.entity.ai.pathing.LandPathNodeMaker;
 import net.minecraft.entity.ai.pathing.PathNodeType;
 import net.minecraft.entity.passive.FoxEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.WorldView;
 
 import java.util.EnumSet;
 import java.util.Objects;
@@ -24,13 +26,20 @@ public class FoxFollowPlayerGoal extends Goal {
     private int updateCountdownTicks;
     private final EntityNavigation navigation;
     private float oldWaterPathfindingPenalty;
-    public FoxFollowPlayerGoal(FoxEntity entity, double speed, float minDistance, float maxDistance) {
+
+    private boolean leavesAllowed;
+
+    private WorldView world;
+
+    public FoxFollowPlayerGoal(FoxEntity entity, double speed, float minDistance, float maxDistance, boolean leavesAllowed) {
         this.fop = entity;
         this.navigation = fop.getNavigation();
         this.speed = speed;
         this.minDistance = minDistance;
         this.maxDistance = maxDistance;
-        this.setControls(EnumSet.of(Goal.Control.MOVE, Goal.Control.LOOK));
+        this.setControls(EnumSet.of(Control.MOVE, Control.LOOK));
+        this.world = entity.getWorld();
+        this.leavesAllowed = leavesAllowed;
     }
     @Override
     public boolean canStart() {
@@ -57,10 +66,15 @@ public class FoxFollowPlayerGoal extends Goal {
 
     @Override
     public boolean shouldContinue() {
-        if (this.fop.isSitting() || this.fop.isSleeping()) {
+        if (this.navigation.isIdle()) {
             return false;
+        } else {
+            return !this.cannotFollow() && !(this.fop.squaredDistanceTo(this.owner) <= (double) (this.maxDistance * this.maxDistance));
         }
-        return !(this.fop.squaredDistanceTo(this.owner) <= (double)(this.maxDistance * this.maxDistance));
+    }
+
+    private boolean cannotFollow() {
+        return this.fop.isSitting() || this.fop.hasVehicle() || this.fop.isLeashed() || this.fop.isSleeping();
     }
 
     @Override
@@ -80,14 +94,13 @@ public class FoxFollowPlayerGoal extends Goal {
     @Override
     public void tick() {
         this.fop.getLookControl().lookAt(this.owner, 10.0f, this.fop.getMaxLookPitchChange());
-        if (--this.updateCountdownTicks > 0) {
-            return;
-        }
-        this.updateCountdownTicks = this.getTickCount(10);
-        if (this.fop.squaredDistanceTo(this.owner) >= 144.0) {
-            this.tryTeleport();
-        } else {
-            this.navigation.startMovingTo(this.owner, this.speed);
+        if (--this.updateCountdownTicks <= 0) {
+            this.updateCountdownTicks = this.getTickCount(10);
+            if (this.fop.squaredDistanceTo(this.owner) >= 144.0) {
+                tryTeleport();
+            } else {
+                this.navigation.startMovingTo(this.owner, this.speed);
+            }
         }
     }
 
@@ -98,8 +111,9 @@ public class FoxFollowPlayerGoal extends Goal {
             int k = this.getRandomInt(-1, 1);
             int l = this.getRandomInt(-3, 3);
             boolean bl = this.tryTeleportTo(blockPos.getX() + j, blockPos.getY() + k, blockPos.getZ() + l);
-            if (!bl) continue;
-            return;
+            if (bl) {
+                return;
+            }
         }
     }
 
@@ -116,13 +130,17 @@ public class FoxFollowPlayerGoal extends Goal {
     }
 
     private boolean canTeleportTo(BlockPos pos) {
-        PathNodeType pathNodeType = LandPathNodeMaker.getLandNodeType(fop, pos);
+        PathNodeType pathNodeType = LandPathNodeMaker.getLandNodeType(this.fop, pos.mutableCopy());
         if (pathNodeType != PathNodeType.WALKABLE) {
             return false;
         }
-        BlockState blockState = this.fop.getWorld().getBlockState(pos.down());
-        BlockPos blockPos = pos.subtract(this.fop.getBlockPos());
-        return this.fop.getWorld().isSpaceEmpty(this.fop, this.fop.getBoundingBox().offset(blockPos));
+        BlockState blockState = this.world.getBlockState(pos.down());
+        if (!this.leavesAllowed && blockState.getBlock() instanceof LeavesBlock) {
+            return false;
+        } else {
+            BlockPos blockPos = pos.subtract(this.fop.getBlockPos());
+            return this.world.isSpaceEmpty(this.fop, this.fop.getBoundingBox().offset(blockPos));
+        }
     }
 
     private int getRandomInt(int min, int max) {

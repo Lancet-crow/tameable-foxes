@@ -1,4 +1,4 @@
-accessWidener	v1	named
+accessWidener	v2	named
 accessible method net/minecraft/entity/passive/FoxEntity getTrustedUuids ()Ljava/util/List;
 accessible method net/minecraft/entity/passive/FoxEntity addTrustedUuid (Ljava/util/UUID;)V
 accessible method net/minecraft/entity/passive/FoxEntity setSleeping (Z)V
@@ -31,3 +31,8 @@ accessible field net/minecraft/entity/passive/FoxEntity NOTICEABLE_PLAYER_FILTER
 accessible method net/minecraft/entity/passive/FoxEntity isAggressive ()Z
 accessible method net/minecraft/entity/passive/FoxEntity canTrust (Ljava/util/UUID;)Z
 accessible field net/minecraft/entity/passive/FoxEntity OWNER Lnet/minecraft/entity/data/TrackedData;
+accessible method net/minecraft/entity/passive/FoxEntity stopActions ()V
+accessible field net/minecraft/entity/passive/FoxEntity CHICKEN_AND_RABBIT_FILTER Ljava/util/function/Predicate;
+accessible field net/minecraft/entity/LivingEntity jumping Z
+accessible method net/minecraft/entity/passive/FoxEntity setWalking (Z)V
+accessible class net/minecraft/entity/passive/FoxEntity$CalmDownGoal
