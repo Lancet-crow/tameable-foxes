@@ -3,13 +3,14 @@
 	"id": "tameable-foxes",
 	"version": "${version}",
 	"name": "Tameable Foxes",
-	"description": "Small mod that makes foxes tameable",
+	"description": "A mod that makes foxes tameable",
 	"authors": [
 		"Lancet_"
 	],
 	"contact": {
 		"homepage": "https://modrinth.com/mod/tameable-foxes",
-		"sources": "https://github.com/Lancet-crow/tameable-foxes/"
+		"sources": "https://github.com/Lancet-crow/tameable-foxes/",
+		"issues": "https://github.com/Lancet-crow/tameable-foxes/issues"
 	},
 	"license": "CC0-1.0",
 	"icon": "assets/tameable-foxes/icon.png",
@@ -17,7 +18,8 @@
 	"entrypoints": {
 		"main": [
 			"lancet_.tameable_foxes.TameableFoxes"
-		]
+		],
+		"mm_shedaniel:early_risers": ["lancet_.tameable_foxes.FoxTamer::asm"]
 	},
 	"mixins": [
 		"tameable-foxes.mixins.json"
@@ -28,6 +30,7 @@
 		"minecraft": "~1.21",
 		"java": ">=21",
 		"fabric-api": "*",
+		"mm_shedaniel": ">=2.4.1",
 		"fzzy_config": ">=0.6.9+1.21"
 	},
 	"custom": {
