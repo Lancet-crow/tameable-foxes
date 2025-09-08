@@ -1,23 +1,23 @@
 package lancet_.tameable_foxes.mixin;
 
-import lancet_.tameable_foxes.TameableFoxes;
-import lancet_.tameable_foxes.goals.FoxAttackWithOwnerGoal;
-import lancet_.tameable_foxes.goals.FoxFollowPlayerGoal;
-import lancet_.tameable_foxes.goals.FoxSitGoal;
+import lancet_.tameable_foxes.TameableFoxesConfig;
+import lancet_.tameable_foxes.goals.*;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.tags.ItemTags;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.OwnableEntity;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -33,7 +33,7 @@ import java.util.UUID;
 import static net.minecraft.world.entity.animal.Fox.DATA_TRUSTED_ID_0;
 
 @Mixin(Fox.class)
-public class FoxMixin extends Animal {
+public class FoxMixin extends Animal implements OwnableEntity {
 
     @Unique
     Fox fox;
@@ -44,85 +44,141 @@ public class FoxMixin extends Animal {
 
     @Override
     public boolean isFood(ItemStack stack) {
-        return stack.is(ItemTags.FOX_FOOD);
+        return TameableFoxesConfig.FOX_BREEDING_ITEMS.contains(stack.getItem());
+    }
+
+    @Override
+    public boolean canMate(@NotNull Animal otherAnimal) {
+        if (otherAnimal instanceof Fox otherFox && otherAnimal != this.fox){
+            boolean isOtherFoxTamed = otherFox.getEntityData().get(DATA_TRUSTED_ID_0).orElse(null) != null;
+            if (isTame() == isOtherFoxTamed){
+                return !fox.isSitting() && this.isInLove() && fox.isInLove();
+            }
+        }
+        return false;
     }
 
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(@NotNull ServerLevel level, @NotNull AgeableMob otherParent) {
-        if (this.fox == null) this.fox = (Fox) (Object) this;
-        return this.fox.getBreedOffspring(level, otherParent);
+        Fox fox = EntityType.FOX.create(level);
+        if (fox != null) {
+            fox.setVariant(this.random.nextBoolean() ? this.fox.getVariant() : ((Fox)otherParent).getVariant());
+            if (this.getOwner() != null){
+                fox.getEntityData().set(DATA_TRUSTED_ID_0, Optional.ofNullable(this.getOwnerUUID()));
+            }
+        }
+        return fox;
     }
 
     @Override
-    public InteractionResult mobInteract(@NotNull Player player, @NotNull InteractionHand hand) {
+    public @NotNull InteractionResult mobInteract(@NotNull Player player, @NotNull InteractionHand hand) {
         if (this.fox == null) this.fox = (Fox) (Object) this;
         UUID ownerUUID = this.fox.getEntityData().get(DATA_TRUSTED_ID_0).orElse(null);
         InteractionResult interactionResult = super.mobInteract(player, hand);
-        if (interactionResult.consumesAction()){
-            if (ownerUUID == null && TameableFoxes.CONFIG.foxesTameDirectly()){
-                setFoxOwner(player.getUUID());
+        ItemStack itemStack = player.getItemInHand(hand);
+        if (ownerUUID == null && isTamingItem(itemStack) && (TameableFoxesConfig.config.foxesTameDirectly || !isFood(itemStack))){
+            itemStack.consume(1, player);
+            fox.setInLove(player);
+            setFoxOwner(player.getUUID());
+            if (this.level().isClientSide) {
+                return InteractionResult.CONSUME;
             }
+            else{
+                return InteractionResult.SUCCESS;
+            }
+        }
+        else if (isFood(itemStack)){
             return interactionResult;
         }
         if (!player.getUUID().equals(ownerUUID)) return InteractionResult.PASS;
-        this.fox.setSitting(!this.fox.isSitting());
-        this.jumping = false;
-        this.navigation.stop();
-        this.setTarget(null);
+        if (fox.isSleeping()){
+            fox.setSleeping(false);
+        }
+        else{
+            fox.setSitting(!fox.isSitting());
+            this.jumping = false;
+            this.navigation.stop();
+            this.setTarget(null);
+        }
         return InteractionResult.SUCCESS;
     }
 
-    @Inject(method = "registerGoals", at = @At(value = "HEAD"), cancellable = true)
+    @Override
+    public boolean handleLeashAtDistance(@NotNull Entity leashHolder, float distance) {
+        if (fox.isSitting()) {
+            if (distance > 10.0F) {
+                this.dropLeash(true, true);
+            }
+
+            return false;
+        } else {
+            return super.handleLeashAtDistance(leashHolder, distance);
+        }
+    }
+
+    @Unique
+    private boolean isTamingItem(ItemStack itemStack){
+        return TameableFoxesConfig.FOX_TAMING_ITEMS.contains(itemStack.getItem());
+    }
+
+    @Inject(method = "registerGoals", at = @At(value = "TAIL"))
     public void addAiGoals(CallbackInfo ci){
         if(this.fox == null) this.fox = (Fox) (Object) this;
+
+        this.fox.goalSelector.getAvailableGoals().removeIf(goal ->
+                goal.getGoal() instanceof Fox.SeekShelterGoal ||
+                goal.getGoal() instanceof Fox.PerchAndSearchGoal
+                );
+
         this.fox.landTargetGoal = new NearestAttackableTargetGoal<>(
                 this.fox, Animal.class, 10, false, false,
-                entity -> entity instanceof Chicken || entity instanceof Rabbit);
+                entity -> (entity instanceof Chicken || entity instanceof Rabbit) && !isTame());
         this.fox.turtleEggTargetGoal = new NearestAttackableTargetGoal<>(
-                this.fox, Turtle.class, 10, false, false, Turtle.BABY_ON_LAND_SELECTOR);
+                this.fox, Turtle.class, 10, false, false,
+                e -> (e instanceof Turtle && e.isBaby() && !e.isInWater()) && !isTame());
         this.fox.fishTargetGoal = new NearestAttackableTargetGoal<>(
                 this.fox, AbstractFish.class, 20, false, false,
-                entity -> entity instanceof AbstractSchoolingFish);
-        this.fox.goalSelector.addGoal(0, this.fox.new FoxFloatGoal());
-        this.fox.goalSelector.addGoal(0, new ClimbOnTopOfPowderSnowGoal(this, this.level()));
-        this.fox.goalSelector.addGoal(1, this.fox.new FaceplantGoal());
-        this.fox.goalSelector.addGoal(2, this.fox.new FoxPanicGoal(2.2));
-        this.fox.goalSelector.addGoal(3, this.fox.new FoxBreedGoal(1.0));
-        this.fox.goalSelector.addGoal(5, this.fox.new StalkPreyGoal());
-        this.fox.goalSelector.addGoal(6, this.fox.new SeekShelterGoal(1.25));
-        this.fox.goalSelector.addGoal(7, this.fox.new FoxMeleeAttackGoal(1.2F, true));
-        this.fox.goalSelector.addGoal(7, this.fox.new SleepGoal());
-        this.fox.goalSelector.addGoal(8, this.fox.new FoxFollowParentGoal(this.fox, 1.25));
-        this.fox.goalSelector.addGoal(9, this.fox.new FoxStrollThroughVillageGoal(32, 200));
-        this.fox.goalSelector.addGoal(10, this.fox.new FoxEatBerriesGoal(1.2F, 12, 1));
-        this.fox.goalSelector.addGoal(10, new LeapAtTargetGoal(this.fox, 0.4F));
-        this.fox.goalSelector.addGoal(11, new WaterAvoidingRandomStrollGoal(this.fox, 1.0));
-        this.fox.goalSelector.addGoal(11, this.fox.new FoxSearchForItemsGoal());
-        this.fox.goalSelector.addGoal(12, this.fox.new FoxLookAtPlayerGoal(this.fox, Player.class, 24.0F));
-        this.fox.goalSelector.addGoal(13, this.fox.new PerchAndSearchGoal());
-        this.fox.goalSelector.addGoal(10, this.fox.new FoxPounceGoal());
-        this.fox.goalSelector.addGoal(4, new AvoidEntityGoal<>(this.fox, Wolf.class, 8.0F,
-                1.6, 1.4, entity -> !((Wolf)entity).isTame() && !this.fox.isDefending()));
-        this.fox.goalSelector.addGoal(4, new AvoidEntityGoal<>(this.fox, PolarBear.class, 8.0F,
-                1.6, 1.4, entity -> !this.fox.isDefending()));
-        this.fox.targetSelector.addGoal(3, this.fox.new DefendTrustedTargetGoal(LivingEntity.class, false,
-                        false, player -> Fox.TRUSTED_TARGET_SELECTOR.test(player)
-                && !this.fox.trusts(player.getUUID())));
-        this.fox.goalSelector.addGoal(1, new FoxAttackWithOwnerGoal(this.fox));
-        this.fox.goalSelector.addGoal(6, new FoxFollowPlayerGoal(this.fox, 1.0, 10.0f, 2.0f));
+                entity -> entity instanceof AbstractSchoolingFish && !isTame());
         this.fox.goalSelector.addGoal(1, new FoxSitGoal(this.fox));
-        this.fox.goalSelector.addGoal(4, new AvoidEntityGoal<>(this.fox,
-                Player.class, 16.0F, 1.6, 1.4,e -> !e.isShiftKeyDown()
-                && Fox.AVOID_PLAYERS.test(e) && !this.fox.trusts(e.getUUID()) && !this.fox.isDefending()));
+        this.fox.goalSelector.addGoal(1, new FoxAttackWithOwnerGoal(this.fox));
         this.fox.goalSelector.addGoal(1, new TemptGoal(this.fox, 0.75,
-                Ingredient.of(new ItemStack(Items.SWEET_BERRIES)), false));
-        ci.cancel();
+                Ingredient.of(TameableFoxesConfig.getFoxTemptingItemStacks()), false));
+        this.fox.goalSelector.addGoal(4, new AvoidEntityGoal<>(this.fox,
+                Player.class, 16.0F, 1.6, 1.4,e ->
+                Fox.AVOID_PLAYERS.test(e) && !isTame() && !this.fox.isAggressive()));
+        this.fox.goalSelector.addGoal(5, new FoxStalkPreyGoal(this.fox));
+        this.fox.goalSelector.addGoal(6, new FoxFollowPlayerGoal(this.fox, 1.0, 10.0f, 2.0f));
+        this.fox.goalSelector.addGoal(6, new FoxSeekShelterGoal(1.25, fox));
+        this.fox.goalSelector.addGoal(13, new FoxPerchAndSearchGoal(this.fox));
     }
 
     @Unique
     public void setFoxOwner(UUID newOwnerUUID) {
         assert this.fox != null;
         this.fox.getEntityData().set(DATA_TRUSTED_ID_0, Optional.of(newOwnerUUID));
+    }
+
+    @Nullable
+    @Override
+    public UUID getOwnerUUID() {
+        return this.fox.getEntityData().get(DATA_TRUSTED_ID_0).orElse(null);
+    }
+
+    @Unique
+    public boolean isTame() {
+        return getOwnerUUID() != null;
+    }
+
+    @Override
+    public void die(@NotNull DamageSource cause) {
+        net.minecraft.network.chat.Component deathMessage = this.getCombatTracker().getDeathMessage();
+        super.die(cause);
+
+        if (this.dead) {
+            if (!this.level().isClientSide && this.level().getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES) && this.getOwner() instanceof ServerPlayer) {
+                this.getOwner().sendSystemMessage(deathMessage);
+            }
+        }
     }
 }

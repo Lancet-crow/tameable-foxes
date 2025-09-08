@@ -1,6 +1,5 @@
 package lancet_.tameable_foxes;
 
-import lancet_.tameable_foxes.config.TameableFoxesConfig;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -16,10 +15,8 @@ public class TameableFoxes
     // Directly reference a slf4j logger
     public static final Logger LOGGER = LogUtils.getLogger();
 
-    public static final TameableFoxesConfig CONFIG = TameableFoxesConfig.createAndLoad();
-
     public TameableFoxes()
     {
-
+        TameableFoxesConfig.init();
     }
 }
