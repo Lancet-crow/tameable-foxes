@@ -1,11 +1,14 @@
 package lancet_.tameable_foxes.mixin.fox_goals;
 
+import com.llamalad7.mixinextras.injector.ModifyReceiver;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import lancet_.tameable_foxes.TameableFoxesConfig;
 import net.minecraft.entity.ai.goal.TemptGoal;
 import net.minecraft.entity.mob.PathAwareEntity;
 import net.minecraft.entity.passive.FoxEntity;
 import net.minecraft.entity.passive.TameableEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.recipe.Ingredient;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -39,5 +42,13 @@ public class FoxTemptGoalMixin {
         if (!TameableFoxesConfig.config.untamedFoxesCanBeTempted) {
             cir.setReturnValue(false);
         }
+    }
+
+    @ModifyReceiver(method = "isTemptedBy", at = @At(value = "INVOKE", target = "Lnet/minecraft/recipe/Ingredient;test(Lnet/minecraft/item/ItemStack;)Z"))
+    private Ingredient doThat(Ingredient instance, ItemStack itemStack){
+        if (this.mob instanceof FoxEntity){
+            return Ingredient.ofStacks(TameableFoxesConfig.getFoxTemptingItemStacks());
+        }
+        return instance;
     }
 }

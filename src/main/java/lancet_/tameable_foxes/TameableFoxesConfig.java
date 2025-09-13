@@ -22,16 +22,14 @@ public class TameableFoxesConfig extends Config {
     public static List<Item> FOX_TAMING_ITEMS = List.of();
     public static List<Item> FOX_BREEDING_ITEMS = List.of();
     public static List<Item> ITEMS_RESTRICTED_TO_PICK = List.of();
-    @RequiresAction(action = Action.RESTART)
+    //@RequiresAction(action = Action.RESTART)
     public ValidatedList<Identifier> foxTamingItems = new ValidatedList<>(List.of(
             Identifier.tryParse("glow_berries")
     ), ValidatedIdentifier.ofRegistry(Identifier.tryParse("glow_berries"), Registries.ITEM));
-    @RequiresAction(action = Action.RESTART)
     public ValidatedList<Identifier> foxBreedingItems = new ValidatedList<>(List.of(
             Identifier.tryParse("sweet_berries")
     ), ValidatedIdentifier.ofRegistry(Identifier.tryParse("sweet_berries"), Registries.ITEM));
     public ValidatedList<Identifier> itemsRestrictedToPick = new ValidatedList<>(List.of(), ValidatedIdentifier.ofRegistry(Identifier.tryParse(""), Registries.ITEM));
-    @RequiresAction(action = Action.RESTART)
     public boolean foxesAttackWithOwner = false;
 
     public boolean foxesTameDirectly = true;

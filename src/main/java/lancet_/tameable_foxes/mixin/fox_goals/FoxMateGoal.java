@@ -16,12 +16,6 @@ import static net.minecraft.entity.passive.TameableEntity.OWNER_UUID;
 
 @Mixin(FoxEntity.MateGoal.class)
 public class FoxMateGoal {
-
-
-    @Shadow(aliases = "field_17973")
-    @Final
-    private FoxEntity fox;
-
     @WrapOperation(method = "breed",
             at = @At(value = "INVOKE",
                     target = "Lnet/minecraft/entity/passive/FoxEntity;addTrustedUuid(Ljava/util/UUID;)V"))

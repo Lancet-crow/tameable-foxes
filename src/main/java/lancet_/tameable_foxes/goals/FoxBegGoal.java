@@ -13,13 +13,13 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class FoxBegGoal extends Goal {
     private final FoxEntity fox;
     private final World world;
     private final float begDistance;
     private final TargetPredicate validPlayerPredicate;
-    private final List<ItemStack> attractiveItems;
     @Nullable
     private PlayerEntity begFrom;
     private int timer;
@@ -30,7 +30,6 @@ public class FoxBegGoal extends Goal {
         this.begDistance = begDistance;
         this.validPlayerPredicate = TargetPredicate.createNonAttackable().setBaseMaxDistance(begDistance);
         this.setControls(EnumSet.of(Goal.Control.LOOK));
-        this.attractiveItems = TameableFoxesConfig.getFoxTemptingItemStacks().toList();
     }
 
     @Override
@@ -71,7 +70,7 @@ public class FoxBegGoal extends Goal {
     private boolean isAttractive(PlayerEntity player) {
         for (Hand hand : Hand.values()) {
             ItemStack itemStack = player.getStackInHand(hand);
-            if (attractiveItems.stream().anyMatch(attractiveStack -> attractiveStack.getItem().equals(itemStack.getItem()))) {
+            if (TameableFoxesConfig.getFoxTemptingItemStacks().anyMatch(attractiveStack -> attractiveStack.getItem().equals(itemStack.getItem()))) {
                 return true;
             }
         }

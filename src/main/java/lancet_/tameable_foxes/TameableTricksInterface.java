@@ -9,7 +9,7 @@ import net.minecraft.entity.passive.TameableEntity;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface TameableTricksInterface extends Angerable {
+public interface TameableTricksInterface {
     GoalSelector getFoxGoalSelector();
 
     boolean isBegging();

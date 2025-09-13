@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(MobEntity.class)
-public abstract class MobEntityLogMixin {
+public abstract class MobEntityMixin {
 
     @WrapOperation(method = "tickMovement",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/GameRules;getBoolean(Lnet/minecraft/world/GameRules$Key;)Z"))

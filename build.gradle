@@ -28,7 +28,6 @@ repositories {
 			includeGroup "maven.modrinth"
 		}
 	}
-	maven{ url = "https://maven.shedaniel.me/" }
 }
 
 loom {
@@ -42,9 +41,6 @@ dependencies {
 
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 	modImplementation "me.fzzyhmstrs:fzzy_config:${project.fzzyConfigVersion}"
-
-	modImplementation "me.shedaniel:mm:2.4.1"
-	include "me.shedaniel:mm:2.4.1"
 
 	modImplementation "maven.modrinth:not-enough-animations:1.9.3-1.20.1"
 	modImplementation "maven.modrinth:companion:5.3.0+fabric"

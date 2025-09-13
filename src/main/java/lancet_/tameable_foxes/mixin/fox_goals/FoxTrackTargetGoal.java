@@ -1,5 +1,6 @@
 package lancet_.tameable_foxes.mixin.fox_goals;
 
+import lancet_.tameable_foxes.TameableFoxesConfig;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.TargetPredicate;
 import net.minecraft.entity.ai.goal.TrackTargetGoal;
@@ -28,7 +29,7 @@ public abstract class FoxTrackTargetGoal {
     @Inject(method = "shouldContinue", at = @At("HEAD"), cancellable = true)
     private void checkIfFoxAndStopIfCant(CallbackInfoReturnable<Boolean> cir) {
         if (this.mob instanceof FoxEntity) {
-            if (!canTrack(this.target, TargetPredicate.DEFAULT)) {
+            if (!canTrack(this.target, TargetPredicate.DEFAULT) || !TameableFoxesConfig.config.foxesAttackWithOwner) {
                 cir.setReturnValue(false);
             }
         }

@@ -99,10 +99,9 @@ public abstract class FoxEntityMixin extends AnimalEntity implements Tameable, T
     abstract void addTrustedUuid(@Nullable UUID uuid);
 
     @Shadow
-    public abstract boolean isAggressive();
-
-    @Shadow
     public abstract void setAggressive(boolean aggressive);
+
+    @Shadow protected abstract void spit(ItemStack stack);
 
     @Inject(method = "readCustomDataFromNbt", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/passive/FoxEntity;setSleeping(Z)V"))
     private void checkIfPreviousOwnerExists(NbtCompound nbt, CallbackInfo ci) {
@@ -336,9 +335,8 @@ public abstract class FoxEntityMixin extends AnimalEntity implements Tameable, T
         } else if (target instanceof PlayerEntity && owner instanceof PlayerEntity && !((PlayerEntity) owner).shouldDamagePlayer((PlayerEntity) target)) {
             return false;
         } else {
-            return target instanceof AbstractHorseEntity && ((AbstractHorseEntity) target).isTame()
-                    ? false
-                    : !(target instanceof TameableEntity) || !((TameableEntity) target).isTamed();
+            return (!(target instanceof AbstractHorseEntity) || !((AbstractHorseEntity) target).isTame())
+                    && (!(target instanceof TameableEntity) || !((TameableEntity) target).isTamed());
         }
     }
 
@@ -358,9 +356,9 @@ public abstract class FoxEntityMixin extends AnimalEntity implements Tameable, T
 
     @Override
     public void stopAnger() {
-        this.setAttacker((LivingEntity) null);
-        this.setAngryAt((UUID) null);
-        this.setTarget((LivingEntity) null);
+        this.setAttacker(null);
+        this.setAngryAt(null);
+        this.setTarget(null);
         this.setAngerTime(0);
         this.setAggressive(false);
     }
