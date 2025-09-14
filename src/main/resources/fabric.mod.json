@@ -12,7 +12,7 @@
 		"sources": "https://github.com/Lancet-crow/tameable-foxes",
 		"issues": "https://github.com/Lancet-crow/tameable-foxes/issues"
 	},
-	"license": "CC0-1.0",
+	"license": "MIT",
 	"icon": "assets/tameable-foxes/icon.png",
 	"environment": "*",
 	"entrypoints": {
