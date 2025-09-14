@@ -1,6 +1,7 @@
 package lancet_.tameable_foxes.mixin.fox_goals;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import lancet_.tameable_foxes.TameableFoxesConfig;
 import lancet_.tameable_foxes.TameableTricksInterface;
@@ -53,6 +54,9 @@ public abstract class FoxAttackWithOwnerGoalMixin extends TrackTargetGoal {
 
     @Override
     public boolean shouldContinue() {
-        return super.shouldContinue() && TameableFoxesConfig.config.foxesAttackWithOwner;
+        if (((AnimalEntity) this.tameable) instanceof FoxEntity){
+            return super.shouldContinue() && TameableFoxesConfig.config.foxesAttackWithOwner;
+        }
+        return super.shouldContinue();
     }
 }
