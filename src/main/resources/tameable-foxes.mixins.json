@@ -7,11 +7,11 @@
     "FoxEntityMixin",
     "FoxTamerMixin",
     "MobEntityMixin",
-    "TameableEntityMixin",
     "compat.CompanionHooksMixin",
     "compat.CompanionTargetGoalMixin",
     "compat.NEAPetAnimationMixin",
     "fox_goals.FoxAttackGoalMixin",
+    "fox_goals.FoxAttackWithOwnerGoalMixin",
     "fox_goals.FoxAvoidDaylightGoalMixin",
     "fox_goals.FoxDefendFriendGoal",
     "fox_goals.FoxEscapeWhenNotAggroGoalMixin",
@@ -21,7 +21,6 @@
     "fox_goals.FoxMoveToHuntGoalMixin",
     "fox_goals.FoxSitDownAndLookAroundGoalMixin",
     "fox_goals.FoxTemptGoalMixin",
-    "fox_goals.FoxTrackTargetGoal",
     "wolf.WolfEntityMixin"
   ],
   "injectors": {

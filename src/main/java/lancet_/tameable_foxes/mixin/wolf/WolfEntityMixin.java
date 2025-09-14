@@ -37,8 +37,7 @@ public abstract class WolfEntityMixin extends TameableEntity {
         @Nullable Predicate<LivingEntity> targetPredicate = args.get(3);
         if (targetPredicate != null && targetPredicate.equals(FOLLOW_TAMED_PREDICATE)) {
             args.set(3, targetPredicate.and(entity -> {
-                        EntityType<?> otherEntityType = entity.getType();
-                        if (otherEntityType == EntityType.FOX && entity instanceof FoxEntity fox &&
+                        if (entity instanceof FoxEntity fox &&
                                 ((TameableEntity) (Object) fox).isTamed() && !this.isTamed() &&
                                 !TameableFoxesConfig.config.untamedWolvesAttackTamedFoxes) {
                             return false;

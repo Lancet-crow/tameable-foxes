@@ -336,7 +336,8 @@ public abstract class FoxEntityMixin extends AnimalEntity implements Tameable, T
             return false;
         } else {
             return (!(target instanceof AbstractHorseEntity) || !((AbstractHorseEntity) target).isTame())
-                    && (!(target instanceof TameableEntity) || !((TameableEntity) target).isTamed());
+                    && (!(target instanceof TameableEntity) || !((TameableEntity) target).isTamed())
+                    && TameableFoxesConfig.config.foxesAttackWithOwner;
         }
     }
 

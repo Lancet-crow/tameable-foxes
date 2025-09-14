@@ -1,7 +1,5 @@
 package lancet_.tameable_foxes;
 
-import me.fzzyhmstrs.fzzy_config.annotations.Action;
-import me.fzzyhmstrs.fzzy_config.annotations.RequiresAction;
 import me.fzzyhmstrs.fzzy_config.api.ConfigApiJava;
 import me.fzzyhmstrs.fzzy_config.api.RegisterType;
 import me.fzzyhmstrs.fzzy_config.config.Config;
@@ -22,7 +20,6 @@ public class TameableFoxesConfig extends Config {
     public static List<Item> FOX_TAMING_ITEMS = List.of();
     public static List<Item> FOX_BREEDING_ITEMS = List.of();
     public static List<Item> ITEMS_RESTRICTED_TO_PICK = List.of();
-    //@RequiresAction(action = Action.RESTART)
     public ValidatedList<Identifier> foxTamingItems = new ValidatedList<>(List.of(
             Identifier.tryParse("glow_berries")
     ), ValidatedIdentifier.ofRegistry(Identifier.tryParse("glow_berries"), Registries.ITEM));
