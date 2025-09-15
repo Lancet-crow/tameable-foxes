@@ -1,12 +1,12 @@
 {
   "tameable-foxes.config.foxTamingItems": "Objectes per ensinistrar guineus",
-  "tameable-foxes.config.foxTamingItems.desc": "Canvia o afegeix els objectes requerits per ensinistrar una guineu.",
+  "tameable-foxes.config.foxTamingItems.desc": "Canvia o afegeix els objectes requerits per a ensinistrar una guineu.",
 
   "tameable-foxes.config.foxBreedingItems": "Objectes per criar guineus",
-  "tameable-foxes.config.foxBreedingItems.desc": "Canvia o afegeix els objectes requerits per criar una guineu.",
+  "tameable-foxes.config.foxBreedingItems.desc": "Canvia o afegeix els objectes requerits per a criar una guineu.",
 
   "tameable-foxes.config.itemsRestrictedToPick": "Llista negra d'objectes que es poden agafar",
-  "tameable-foxes.config.itemsRestrictedToPick.desc": "Impedeix que les guineus agafin amb la boca els objectes a aquesta llista.",
+  "tameable-foxes.config.itemsRestrictedToPick.desc": "Impedeix que les guineus agafin amb la boca els objectes en aquesta llista.",
 
   "tameable-foxes.config.foxesAttackWithOwner": "Les guineus ataquen amb l'amo",
   "tameable-foxes.config.foxesAttackWithOwner.desc": "Si cert, les guineus atacaran als mobs que ataquin a l'amo.",
