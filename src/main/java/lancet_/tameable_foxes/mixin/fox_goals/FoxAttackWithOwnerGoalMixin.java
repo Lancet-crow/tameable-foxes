@@ -40,9 +40,8 @@ public abstract class FoxAttackWithOwnerGoalMixin extends TrackTargetGoal {
     private boolean checkIfFox(boolean original, @Local LivingEntity target, @Local LivingEntity owner) {
         if (((AnimalEntity) this.tameable) instanceof FoxEntity fox) {
             return ((TameableTricksInterface) fox).canAttackWithOwner(target, owner);
-        } else {
-            return original;
         }
+        return original;
     }
 
     @Inject(method = "start", at = @At("TAIL"))

@@ -38,19 +38,24 @@ public abstract class FoxTemptGoalMixin {
 
     @ModifyReturnValue(method = "canStart", at = @At("RETURN"))
     private boolean notStartIfConfigIsOff(boolean original) {
-        return original && TameableFoxesConfig.config.untamedFoxesCanBeTempted;
+        if (this.mob instanceof FoxEntity){
+            return original && TameableFoxesConfig.config.untamedFoxesCanBeTempted;
+        }
+        return original;
     }
 
     @Inject(method = "shouldContinue", at = @At("HEAD"), cancellable = true)
     private void foxShouldStopWhenSatOrConfigIsOff(CallbackInfoReturnable<Boolean> cir) {
-        if (this.mob instanceof FoxEntity fox && (fox.isSitting() || ((TameableEntity) (Object) fox).isTamed())) {
-            cir.setReturnValue(false);
-        }
-        if (!TameableFoxesConfig.config.untamedFoxesCanBeTempted) {
-            cir.setReturnValue(false);
-        }
-        if (!isTemptedBy(this.closestPlayer)){
-            cir.setReturnValue(false);
+        if (this.mob instanceof FoxEntity fox){
+            if (fox.isSitting() || ((TameableEntity) (Object) fox).isTamed()) {
+                cir.setReturnValue(false);
+            }
+            if (!TameableFoxesConfig.config.untamedFoxesCanBeTempted) {
+                cir.setReturnValue(false);
+            }
+            if (!isTemptedBy(this.closestPlayer)){
+                cir.setReturnValue(false);
+            }
         }
     }
 

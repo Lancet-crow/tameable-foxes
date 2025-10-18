@@ -5,9 +5,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import lancet_.tameable_foxes.TameableFoxesConfig;
 import lancet_.tameable_foxes.TameableTricksInterface;
 import net.minecraft.entity.passive.FoxEntity;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 
 import java.util.UUID;
