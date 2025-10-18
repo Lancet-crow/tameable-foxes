@@ -9,23 +9,23 @@
   "tameable-foxes.config.itemsRestrictedToPick.desc": "Не позволяет лисам подбирать любые предметы, перечисленные здесь.",
 
   "tameable-foxes.config.foxesAttackWithOwner": "Лисы Атакуют с Хозяином",
-  "tameable-foxes.config.foxesAttackWithOwner.desc": "Если true, лисы будут атаковать мобов, которых бьёт их хозяин.",
+  "tameable-foxes.config.foxesAttackWithOwner.desc": "Если Да, лисы будут атаковать мобов, которых бьёт их хозяин.",
 
   "tameable-foxes.config.foxesTameDirectly": "Лисы Приручаются Напрямую",
-  "tameable-foxes.config.foxesTameDirectly.desc": "Если false, лисы могут быть приручены только через размножение.",
+  "tameable-foxes.config.foxesTameDirectly.desc": "Если Нет, лисы могут быть приручены только через размножение.",
 
   "tameable-foxes.config.foxesTamingChance": "Шанс Приручения Лис",
   "tameable-foxes.config.foxesTamingChance.desc": "0 = Неприручаемые\n1 = Мгновенное Приручение",
 
   "tameable-foxes.config.foxesCanIgnoreMobGriefingRule": "Лисы Игнорируют Правило mobGriefing",
-  "tameable-foxes.config.foxesCanIgnoreMobGriefingRule.desc": "Если true, лисы будут подбирать предметы даже если /gamerule mobGriefing установлено на false.",
+  "tameable-foxes.config.foxesCanIgnoreMobGriefingRule.desc": "Если Да, лисы будут подбирать предметы даже если /gamerule mobGriefing установлено на false.",
 
   "tameable-foxes.config.foxesTrustOnBorn": "Лисы Доверяют При Рождении",
-  "tameable-foxes.config.foxesTrustOnBorn.desc": "Если true, когда вы размножаете двух лис, их ребёнок будет доверять вам и будет приручен.",
+  "tameable-foxes.config.foxesTrustOnBorn.desc": "Если Да, когда вы размножаете двух лис, их ребёнок будет доверять вам и будет приручен.",
 
   "tameable-foxes.config.untamedFoxesCanBeTempted": "Дикие Лисы Могут Следовать За Игроком",
-  "tameable-foxes.config.untamedFoxesCanBeTempted.desc": "Если true, дикие лисы будут следовать за вами, когда вы держите предметы приручения/размножения лис.",
+  "tameable-foxes.config.untamedFoxesCanBeTempted.desc": "Если Да, дикие лисы будут следовать за вами, когда вы держите предметы приручения/размножения лис.",
 
   "tameable-foxes.config.untamedWolvesAttackTamedFoxes": "Дикие Волки Атакуют Прирученных Лис",
-  "tameable-foxes.config.untamedWolvesAttackTamedFoxes.desc": "Если false, волки больше не будут атаковать любых прирученных лис."
+  "tameable-foxes.config.untamedWolvesAttackTamedFoxes.desc": "Если Нет, волки больше не будут атаковать любых прирученных лис."
 }

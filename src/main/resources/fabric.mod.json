@@ -7,6 +7,10 @@
 	"authors": [
 		"Lancet_"
 	],
+	"contributors": [
+		"Fyoncle",
+		"Maria"
+	],
 	"contact": {
 		"homepage": "https://modrinth.com/mod/tameable-foxes",
 		"sources": "https://github.com/Lancet-crow/tameable-foxes",
@@ -33,6 +37,11 @@
 	"custom": {
 		"fzzy_config": [
 			"tameable-foxes"
-		]
+		],
+		"modmenu": {
+			"links": {
+				"modmenu.discord": "https://discord.gg/RQ9cCyMr5Z"
+			}
+		}
 	}
 }
