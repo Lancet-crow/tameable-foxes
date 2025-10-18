@@ -1,0 +1,31 @@
+{
+  "tameable-foxes.config.foxTamingItems": "Objectes per ensinistrar guineus",
+  "tameable-foxes.config.foxTamingItems.desc": "Canvia o afegeix els objectes requerits per a ensinistrar una guineu.",
+
+  "tameable-foxes.config.foxBreedingItems": "Objectes per criar guineus",
+  "tameable-foxes.config.foxBreedingItems.desc": "Canvia o afegeix els objectes requerits per a criar una guineu.",
+
+  "tameable-foxes.config.itemsRestrictedToPick": "Llista negra d'objectes que es poden agafar",
+  "tameable-foxes.config.itemsRestrictedToPick.desc": "Impedeix que les guineus agafin amb la boca els objectes en aquesta llista.",
+
+  "tameable-foxes.config.foxesAttackWithOwner": "Les guineus ataquen amb l'amo",
+  "tameable-foxes.config.foxesAttackWithOwner.desc": "Si cert, les guineus atacaran als mobs que ataquin a l'amo.",
+
+  "tameable-foxes.config.foxesTameDirectly": "Les guineus s'ensinistren directament",
+  "tameable-foxes.config.foxesTameDirectly.desc": "Si fals, les guineus només poden ser ensinistrades amb un objecte per criar.",
+
+  "tameable-foxes.config.foxesTamingChance": "Possibilitat d'ensinistrar guineus",
+  "tameable-foxes.config.foxesTamingChance.desc": "0 = Indomable\n1 = Ensinistrar instantaniament",
+
+  "tameable-foxes.config.foxesCanIgnoreMobGriefingRule": "Les guineus ignoren mobGriefing Gamerule",
+  "tameable-foxes.config.foxesCanIgnoreMobGriefingRule.desc": "Si cert, les guineus encara agafaran objectes fins i tot si /gamerule mobGriefing està definit com fals.",
+
+  "tameable-foxes.config.foxesTrustOnBorn": "Les guineus confien en tu quan neixen",
+  "tameable-foxes.config.foxesTrustOnBorn.desc": "Si cert, quan dues guineus crien, el nadó directament confiarà en tu i estarà ensinistrat.",
+
+  "tameable-foxes.config.untamedFoxesCanBeTempted": "Les guineus no ensinistrades poden ser temptades",
+  "tameable-foxes.config.untamedFoxesCanBeTempted.desc": "Si cert, les guineus no ensinistrades et seguiran quan tu aguantis objectes ensinistradors o de cria de les guineus.",
+
+  "tameable-foxes.config.untamedWolvesAttackTamedFoxes": "Llops no ensinistrats ataquen guineus ensinistrades",
+  "tameable-foxes.config.untamedWolvesAttackTamedFoxes.desc": "Si fals, els llops ja no atacaran guineus ensinistrades."
+}
