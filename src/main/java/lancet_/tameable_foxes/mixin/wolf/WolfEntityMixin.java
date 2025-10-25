@@ -8,7 +8,6 @@ import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
-import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -18,7 +17,6 @@ import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 import java.util.function.Predicate;
 
-@Debug(export = true)
 @Mixin(WolfEntity.class)
 public abstract class WolfEntityMixin extends TameableEntity {
 

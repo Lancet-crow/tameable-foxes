@@ -39,9 +39,6 @@ dependencies {
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 	modImplementation "me.fzzyhmstrs:fzzy_config:${project.fzzyConfigVersion}"
 
-	modImplementation "me.shedaniel:mm:2.4.1"
-	include "me.shedaniel:mm:2.4.1"
-
 	modImplementation "maven.modrinth:not-enough-animations:1.10.1-1.21"
 	modImplementation "maven.modrinth:companion:6.1.1+fabric"
 }

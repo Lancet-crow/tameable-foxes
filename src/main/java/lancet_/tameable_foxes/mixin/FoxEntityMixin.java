@@ -73,19 +73,10 @@ public abstract class FoxEntityMixin extends AnimalEntity implements Tameable, T
     }
 
     @Shadow
-    protected abstract void eat(PlayerEntity player, Hand hand, ItemStack stack);
-
-    @Shadow
     public abstract boolean isSitting();
 
     @Shadow
     public abstract void setSitting(boolean sitting);
-
-    @Shadow
-    public abstract boolean isBreedingItem(ItemStack stack);
-
-    @Shadow
-    public abstract boolean isSleeping();
 
     @Shadow
     public abstract void setSleeping(boolean sleeping);
@@ -97,13 +88,10 @@ public abstract class FoxEntityMixin extends AnimalEntity implements Tameable, T
     public abstract void playAmbientSound();
 
     @Shadow
-    abstract void addTrustedUuid(@Nullable UUID uuid);
+    public abstract void addTrustedUuid(@Nullable UUID uuid);
 
     @Shadow
-    public abstract boolean isAggressive();
-
-    @Shadow
-    public abstract void setAggressive(boolean aggressive);
+    abstract void setAggressive(boolean aggressive);
 
     @Inject(method = "readCustomDataFromNbt", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/passive/FoxEntity;setSleeping(Z)V"))
     private void checkIfPreviousOwnerExists(NbtCompound nbt, CallbackInfo ci) {

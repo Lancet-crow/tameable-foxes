@@ -2,10 +2,15 @@ package lancet_.tameable_foxes.mixin.fox_goals;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import lancet_.tameable_foxes.TameableFoxesConfig;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.TemptGoal;
 import net.minecraft.entity.mob.PathAwareEntity;
 import net.minecraft.entity.passive.FoxEntity;
 import net.minecraft.entity.passive.TameableEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.recipe.Ingredient;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -13,11 +18,17 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.function.Predicate;
+
 @Mixin(TemptGoal.class)
-public class FoxTemptGoalMixin {
+public abstract class FoxTemptGoalMixin {
     @Shadow
     @Final
     protected PathAwareEntity mob;
+
+    @Shadow protected abstract boolean isTemptedBy(LivingEntity entity);
+
+    @Shadow @Nullable protected PlayerEntity closestPlayer;
 
     @Inject(method = "canStart", at = @At("HEAD"), cancellable = true)
     private void foxShouldStopIfTamed(CallbackInfoReturnable<Boolean> cir) {
@@ -28,16 +39,33 @@ public class FoxTemptGoalMixin {
 
     @ModifyReturnValue(method = "canStart", at = @At("RETURN"))
     private boolean notStartIfConfigIsOff(boolean original) {
-        return original && TameableFoxesConfig.config.untamedFoxesCanBeTempted;
+        if (this.mob instanceof FoxEntity){
+            return original && TameableFoxesConfig.config.untamedFoxesCanBeTempted;
+        }
+        return original;
     }
 
     @Inject(method = "shouldContinue", at = @At("HEAD"), cancellable = true)
     private void foxShouldStopWhenSatOrConfigIsOff(CallbackInfoReturnable<Boolean> cir) {
-        if (this.mob instanceof FoxEntity fox && (fox.isSitting() || ((TameableEntity) (Object) fox).isTamed())) {
-            cir.setReturnValue(false);
+        if (this.mob instanceof FoxEntity fox){
+            if (fox.isSitting() || ((TameableEntity) (Object) fox).isTamed()) {
+                cir.setReturnValue(false);
+            }
+            if (!TameableFoxesConfig.config.untamedFoxesCanBeTempted) {
+                cir.setReturnValue(false);
+            }
+            if (!isTemptedBy(this.closestPlayer)){
+                cir.setReturnValue(false);
+            }
         }
-        if (!TameableFoxesConfig.config.untamedFoxesCanBeTempted) {
-            cir.setReturnValue(false);
+    }
+
+    @ModifyReturnValue(method = "isTemptedBy", at = @At(value = "RETURN"))
+    private boolean updateTemptingStacks(boolean original, LivingEntity entity){
+        if (this.mob instanceof FoxEntity){
+            Predicate<ItemStack> foxPredicate = Ingredient.ofStacks(TameableFoxesConfig.getFoxTemptingItemStacks());
+            return original || foxPredicate.test(entity.getMainHandStack()) || foxPredicate.test(entity.getOffHandStack());
         }
+        return original;
     }
 }

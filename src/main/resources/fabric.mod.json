@@ -7,6 +7,10 @@
 	"authors": [
 		"Lancet_"
 	],
+	"contributors": [
+		"Fyoncle",
+		"Maria"
+	],
 	"contact": {
 		"homepage": "https://modrinth.com/mod/tameable-foxes",
 		"sources": "https://github.com/Lancet-crow/tameable-foxes/",
@@ -18,8 +22,7 @@
 	"entrypoints": {
 		"main": [
 			"lancet_.tameable_foxes.TameableFoxes"
-		],
-		"mm_shedaniel:early_risers": ["lancet_.tameable_foxes.FoxTamer::asm"]
+		]
 	},
 	"mixins": [
 		"tameable-foxes.mixins.json"
@@ -30,12 +33,16 @@
 		"minecraft": "~1.21",
 		"java": ">=21",
 		"fabric-api": "*",
-		"mm_shedaniel": ">=2.4.1",
 		"fzzy_config": ">=0.6.9+1.21"
 	},
 	"custom": {
 		"fzzy_config": [
 			"tameable_foxes"
-		]
+		],
+		"modmenu": {
+			"links": {
+				"modmenu.discord": "https://discord.gg/RQ9cCyMr5Z"
+			}
+		}
 	}
 }
