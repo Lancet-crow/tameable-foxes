@@ -1,0 +1,31 @@
+{
+  "tameablefoxes.config.foxTamingItems": "Предметы Приручения Лис",
+  "tameablefoxes.config.foxTamingItems.desc": "Изменяйте или добавляйте предметы, необходимые для приручения лис.",
+
+  "tameablefoxes.config.foxBreedingItems": "Предметы Размножения Лис",
+  "tameablefoxes.config.foxBreedingItems.desc": "Изменяйте или добавляйте предметы, необходимые для размножения лис.",
+
+  "tameablefoxes.config.itemsRestrictedToPick": "Чёрный Список Подбираемых Предметов",
+  "tameablefoxes.config.itemsRestrictedToPick.desc": "Не позволяет лисам подбирать любые предметы, перечисленные здесь.",
+
+  "tameablefoxes.config.foxesAttackWithOwner": "Лисы Атакуют с Хозяином",
+  "tameablefoxes.config.foxesAttackWithOwner.desc": "Если Да, лисы будут атаковать мобов, которых бьёт их хозяин.",
+
+  "tameablefoxes.config.foxesTameDirectly": "Лисы Приручаются Напрямую",
+  "tameablefoxes.config.foxesTameDirectly.desc": "Если Нет, лисы могут быть приручены только через размножение.",
+
+  "tameablefoxes.config.foxesTamingChance": "Шанс Приручения Лис",
+  "tameablefoxes.config.foxesTamingChance.desc": "0 = Неприручаемые\n1 = Мгновенное Приручение",
+
+  "tameablefoxes.config.foxesCanIgnoreMobGriefingRule": "Лисы Игнорируют Правило mobGriefing",
+  "tameablefoxes.config.foxesCanIgnoreMobGriefingRule.desc": "Если Да, лисы будут подбирать предметы даже если /gamerule mobGriefing установлено на false.",
+
+  "tameablefoxes.config.foxesTrustOnBorn": "Лисы Доверяют При Рождении",
+  "tameablefoxes.config.foxesTrustOnBorn.desc": "Если Да, когда вы размножаете двух лис, их ребёнок будет доверять вам и будет приручен.",
+
+  "tameablefoxes.config.untamedFoxesCanBeTempted": "Дикие Лисы Могут Следовать За Игроком",
+  "tameablefoxes.config.untamedFoxesCanBeTempted.desc": "Если Да, дикие лисы будут следовать за вами, когда вы держите предметы приручения/размножения лис.",
+
+  "tameablefoxes.config.untamedWolvesAttackTamedFoxes": "Дикие Волки Атакуют Прирученных Лис",
+  "tameablefoxes.config.untamedWolvesAttackTamedFoxes.desc": "Если Нет, волки больше не будут атаковать любых прирученных лис."
+}

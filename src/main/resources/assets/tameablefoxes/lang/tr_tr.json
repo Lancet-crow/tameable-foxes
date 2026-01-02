@@ -1,0 +1,31 @@
+{
+  "tameablefoxes.config.foxTamingItems": "Tilki Evcilleştirme Eşyaları",
+  "tameablefoxes.config.foxTamingItems.desc": "Tilki evcilleştirmek için gereken eşyaları değiştir veya ekle.",
+
+  "tameablefoxes.config.foxBreedingItems": "Tilki Çifleştirme Eşyaları",
+  "tameablefoxes.config.foxBreedingItems.desc": "Tilki çiftleştirmek için gereken eşyaları değiştir veya ekle.",
+
+  "tameablefoxes.config.itemsRestrictedToPick": "Eşya Alma Karalistesi",
+  "tameablefoxes.config.itemsRestrictedToPick.desc": "Tilkilerin bu listeye eklenen eşyaları ağzına almasını engeller.",
+
+  "tameablefoxes.config.foxesAttackWithOwner": "Tilkiler Sahibiyle Saldırır",
+  "tameablefoxes.config.foxesAttackWithOwner.desc": "Eğer true ise, tilkiler sahibinin vurduğu moblara saldırır.",
+
+  "tameablefoxes.config.foxesTameDirectly": "Tilkiler Direk Evcilleştirilebilir",
+  "tameablefoxes.config.foxesTameDirectly.desc": "Eğer false ise, yalnızca çiftleştirilme sonucunda doğan tilkiler evcilleşir.",
+
+  "tameablefoxes.config.foxesTamingChance": "Tilki Çiftleşme Şansı",
+  "tameablefoxes.config.foxesTamingChance.desc": "0 = Çiftleşemez\n1 = Tek Seferde Çiftleşir",
+
+  "tameablefoxes.config.foxesCanIgnoreMobGriefingRule": "Tilkiler mobGriefing Kuralını Umursamayabilir",
+  "tameablefoxes.config.foxesCanIgnoreMobGriefingRule.desc": "Eğer true ise, tilkiler /gamerule mobGriefing false olsa bile ağızlarına item alabilirler.",
+
+  "tameablefoxes.config.foxesTrustOnBorn": "Tilkiler Doğumda Evcilleşir",
+  "tameablefoxes.config.foxesTrustOnBorn.desc": "Eğer true ise, iki tilki çiftleştirildiğinde doğan bebek evcilleşmiş olur.",
+
+  "tameablefoxes.config.untamedFoxesCanBeTempted": "Evcilleştirilmemiş Tilkiler Yemeği Takip Eder",
+  "tameablefoxes.config.untamedFoxesCanBeTempted.desc": "Eğer true ise, evcilleştirilmemiş tilkiler Evcilleştirme/Çiftleştirme eşyalarını takip eder.",
+
+  "tameablefoxes.config.untamedWolvesAttackTamedFoxes": "Evcilleştirilmemiş Kurtlar Evcilleştirilmiş Tilkilere Saldırır",
+  "tameablefoxes.config.untamedWolvesAttackTamedFoxes.desc": "Eğer false ise, kurtlar artık evcilleştirilmiş tilkilere saldırmaz."
+}

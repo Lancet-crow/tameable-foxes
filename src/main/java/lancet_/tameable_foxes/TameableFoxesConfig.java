@@ -1,78 +1,83 @@
 package lancet_.tameable_foxes;
 
-import me.fzzyhmstrs.fzzy_config.annotations.Action;
-import me.fzzyhmstrs.fzzy_config.annotations.RequiresAction;
 import me.fzzyhmstrs.fzzy_config.api.ConfigApiJava;
 import me.fzzyhmstrs.fzzy_config.api.RegisterType;
 import me.fzzyhmstrs.fzzy_config.config.Config;
 import me.fzzyhmstrs.fzzy_config.validation.collection.ValidatedList;
 import me.fzzyhmstrs.fzzy_config.validation.minecraft.ValidatedIdentifier;
-import me.fzzyhmstrs.fzzy_config.validation.minecraft.ValidatedRegistryType;
+import me.fzzyhmstrs.fzzy_config.validation.number.ValidatedFloat;
+import me.fzzyhmstrs.fzzy_config.validation.number.ValidatedNumber;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.neoforged.neoforge.registries.DeferredItem;
-import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.List;
 import java.util.stream.Stream;
 
 public class TameableFoxesConfig extends Config {
     public static TameableFoxesConfig config = ConfigApiJava.registerAndLoadConfig(TameableFoxesConfig::new, RegisterType.BOTH);
-
-    @RequiresAction(action = Action.RESTART)
-    public ValidatedList<Item> foxTamingItems = new ValidatedList<>(List.of(
-            Items.GLOW_BERRIES
-    ), ValidatedRegistryType.of(BuiltInRegistries.ITEM));
-
-    @RequiresAction(action = Action.RESTART)
-    public ValidatedList<Item> foxBreedingItems = new ValidatedList<>(List.of(
-            Items.SWEET_BERRIES
-    ), ValidatedRegistryType.of(BuiltInRegistries.ITEM));
-
     public static List<Item> FOX_TAMING_ITEMS = List.of();
     public static List<Item> FOX_BREEDING_ITEMS = List.of();
+    public static List<Item> ITEMS_RESTRICTED_TO_PICK = List.of();
+    public ValidatedList<ResourceLocation> foxTamingItems = new ValidatedList<>(List.of(
+            ResourceLocation.tryParse("glow_berries")
+    ), ValidatedIdentifier.ofRegistry(ResourceLocation.tryParse("glow_berries"), BuiltInRegistries.ITEM));
+    public ValidatedList<ResourceLocation> foxBreedingItems = new ValidatedList<>(List.of(
+            ResourceLocation.tryParse("sweet_berries")
+    ), ValidatedIdentifier.ofRegistry(ResourceLocation.tryParse("sweet_berries"), BuiltInRegistries.ITEM));
+    public ValidatedList<ResourceLocation> itemsRestrictedToPick = new ValidatedList<>(List.of(), ValidatedIdentifier.ofRegistry(ResourceLocation.tryParse(""), BuiltInRegistries.ITEM));
+    public boolean foxesAttackWithOwner = false;
 
-    @RequiresAction(action = Action.RESTART)
     public boolean foxesTameDirectly = true;
 
-    public static Stream<ItemStack> getFoxTamingItemStacks(){
+    @ValidatedFloat.Restrict(min = 0f, max = 1f, type = ValidatedNumber.WidgetType.SLIDER)
+    public float foxesTamingChance = 0.3f;
+
+    public boolean foxesCanIgnoreMobGriefingRule = false;
+
+    public boolean foxesTrustOnBorn = true;
+
+    public boolean untamedFoxesCanBeTempted = false;
+
+    public boolean untamedWolvesAttackTamedFoxes = true;
+
+    public TameableFoxesConfig() {
+        super(ResourceLocation.tryBuild(TameableFoxes.MOD_ID, "config"));
+    }
+
+    public static Stream<ItemStack> getFoxTamingItemStacks() {
         Stream<ItemStack> foxTamingItemStacks = Stream.<ItemStack>builder().build();
-        for (Item item: FOX_TAMING_ITEMS
+        for (Item item : FOX_TAMING_ITEMS
         ) {
             foxTamingItemStacks = Stream.concat(foxTamingItemStacks, Stream.of(new ItemStack(item)));
         }
         return foxTamingItemStacks;
     }
 
-    public static Stream<ItemStack> getFoxBreedingItemStacks(){
+    public static Stream<ItemStack> getFoxBreedingItemStacks() {
         Stream<ItemStack> foxBreedingItemStacks = Stream.<ItemStack>builder().build();
-        for (Item item: FOX_BREEDING_ITEMS
+        for (Item item : FOX_BREEDING_ITEMS
         ) {
             foxBreedingItemStacks = Stream.concat(foxBreedingItemStacks, Stream.of(new ItemStack(item)));
         }
         return foxBreedingItemStacks;
     }
 
-    public static Stream<ItemStack> getFoxTemptingItemStacks(){
+    public static Stream<ItemStack> getFoxTemptingItemStacks() {
         return Stream.concat(getFoxTamingItemStacks(), getFoxBreedingItemStacks());
     }
 
-    public TameableFoxesConfig() {
-        super(ResourceLocation.fromNamespaceAndPath(TameableFoxes.MOD_ID, "config"));
-    }
-
     public static void init() {
-        FOX_TAMING_ITEMS = TameableFoxesConfig.config.foxTamingItems;
-        FOX_BREEDING_ITEMS = TameableFoxesConfig.config.foxBreedingItems;
+        FOX_TAMING_ITEMS = TameableFoxesConfig.config.foxTamingItems.stream().map(BuiltInRegistries.ITEM::get).toList();
+        FOX_BREEDING_ITEMS = TameableFoxesConfig.config.foxBreedingItems.stream().map(BuiltInRegistries.ITEM::get).toList();
+        ITEMS_RESTRICTED_TO_PICK = TameableFoxesConfig.config.itemsRestrictedToPick.stream().map(BuiltInRegistries.ITEM::get).toList();
     }
 
     @Override
     public void onUpdateClient() {
-        FOX_TAMING_ITEMS = TameableFoxesConfig.config.foxTamingItems;
-        FOX_BREEDING_ITEMS = TameableFoxesConfig.config.foxBreedingItems;
+        FOX_TAMING_ITEMS = TameableFoxesConfig.config.foxTamingItems.stream().map(BuiltInRegistries.ITEM::get).toList();
+        FOX_BREEDING_ITEMS = TameableFoxesConfig.config.foxBreedingItems.stream().map(BuiltInRegistries.ITEM::get).toList();
+        ITEMS_RESTRICTED_TO_PICK = TameableFoxesConfig.config.itemsRestrictedToPick.stream().map(BuiltInRegistries.ITEM::get).toList();
     }
 }

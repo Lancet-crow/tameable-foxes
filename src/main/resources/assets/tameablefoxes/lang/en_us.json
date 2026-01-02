@@ -1,5 +1,31 @@
 {
-  "itemGroup.tameablefoxes": "Example Mod Tab",
-  "block.tameablefoxes.example_block": "Example Block",
-  "item.tameablefoxes.example_item": "Example Item"
+  "tameablefoxes.config.foxTamingItems": "Fox Taming Items",
+  "tameablefoxes.config.foxTamingItems.desc": "Change or add the items required to tame a fox.",
+
+  "tameablefoxes.config.foxBreedingItems": "Fox Breeding Items",
+  "tameablefoxes.config.foxBreedingItems.desc": "Change or add the items required to breed a fox.",
+
+  "tameablefoxes.config.itemsRestrictedToPick": "Item Pickup Blacklist",
+  "tameablefoxes.config.itemsRestrictedToPick.desc": "Prevents foxes from picking up any items listed here in their mouth.",
+
+  "tameablefoxes.config.foxesAttackWithOwner": "Foxes Attack with Owner",
+  "tameablefoxes.config.foxesAttackWithOwner.desc": "If true, foxes will attack the mobs owner hits.",
+
+  "tameablefoxes.config.foxesTameDirectly": "Foxes Tame Directly",
+  "tameablefoxes.config.foxesTameDirectly.desc": "If false, foxes can only be tamed by breeding them.",
+
+  "tameablefoxes.config.foxesTamingChance": "Foxes Taming Chance",
+  "tameablefoxes.config.foxesTamingChance.desc": "0 = Untameable\n1 = Instant Tame",
+
+  "tameablefoxes.config.foxesCanIgnoreMobGriefingRule": "Foxes Ignore mobGriefing Gamerule",
+  "tameablefoxes.config.foxesCanIgnoreMobGriefingRule.desc": "If true, foxes will still pick items even if /gamerule mobGriefing set to false.",
+
+  "tameablefoxes.config.foxesTrustOnBorn": "Foxes Trust on Born",
+  "tameablefoxes.config.foxesTrustOnBorn.desc": "If true, when two foxed are bred, the baby will directly trust you and be tamed.",
+
+  "tameablefoxes.config.untamedFoxesCanBeTempted": "Untamed Foxes Can Be Tempted",
+  "tameablefoxes.config.untamedFoxesCanBeTempted.desc": "If true, untamed foxes will follow you when you hold taming/breeding items of Foxes.",
+
+  "tameablefoxes.config.untamedWolvesAttackTamedFoxes": "Untamed Wolves Attack Tamed Foxes",
+  "tameablefoxes.config.untamedWolvesAttackTamedFoxes.desc": "If false, wolves will no longer attack any foxes that are tamed."
 }

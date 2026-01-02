@@ -1,0 +1,31 @@
+{
+  "tameablefoxes.config.foxTamingItems": "Objetos para domar zorros",
+  "tameablefoxes.config.foxTamingItems.desc": "Cambia o añade los objetos requeridos para domar zorros.",
+
+  "tameablefoxes.config.foxBreedingItems": "Objectes per criar guineus",
+  "tameablefoxes.config.foxBreedingItems.desc": "Cambia o añade los objetos requeridos para criar un zorro.",
+
+  "tameablefoxes.config.itemsRestrictedToPick": "Lista negra de objetos que se pueden coger",
+  "tameablefoxes.config.itemsRestrictedToPick.desc": "Impide que los zorros cojan con la boca los objetos en esta lista.",
+
+  "tameablefoxes.config.foxesAttackWithOwner": "Los zorros atacan con los dueños",
+  "tameablefoxes.config.foxesAttackWithOwner.desc": "Si cierto, los zorros atacaran los mobs que ataquen al dueño.",
+
+  "tameablefoxes.config.foxesTameDirectly": "Los zorros se doman directamente",
+  "tameablefoxes.config.foxesTameDirectly.desc": "Si falso, los zorros solo pueden ser domados con un objeto para criar.",
+
+  "tameablefoxes.config.foxesTamingChance": "Posibilidad de domar zorros",
+  "tameablefoxes.config.foxesTamingChance.desc": "0 = Indomable\n1 = Domar Instantaniamente",
+
+  "tameablefoxes.config.foxesCanIgnoreMobGriefingRule": "Los zorros ignoran mobGriefing Gamerule",
+  "tameablefoxes.config.foxesCanIgnoreMobGriefingRule.desc": "Si cierto, los zorros todavía cogerán objetos incluso si /gamerule mobGriefing está definido como falso.",
+
+  "tameablefoxes.config.foxesTrustOnBorn": "Los zorros confian en ti cuando nacen",
+  "tameablefoxes.config.foxesTrustOnBorn.desc": "Si cierto, cuando dos zorros crian, el bebé directamente confiará en ti y estará domado.",
+
+  "tameablefoxes.config.untamedFoxesCanBeTempted": "Los zorros no domados pueden ser tentados",
+  "tameablefoxes.config.untamedFoxesCanBeTempted.desc": "Si cierto, los zorros no domados te seguiran cuando tu sujetes objetos para domar o de cria de los zorros.",
+
+  "tameablefoxes.config.untamedWolvesAttackTamedFoxes": "Lobos no domados atacan zorros domados",
+  "tameablefoxes.config.untamedWolvesAttackTamedFoxes.desc": "Si falso, los lobos ya no atacaran zorros domados."
+}
