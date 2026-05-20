@@ -4,26 +4,25 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import lancet_.tameable_foxes.TameableFoxesConfig;
 import lancet_.tameable_foxes.TameableTricksInterface;
-import net.minecraft.entity.passive.FoxEntity;
+import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.animal.Fox;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
 import java.util.UUID;
 
-import static net.minecraft.entity.passive.TameableEntity.OWNER_UUID;
-
-@Mixin(FoxEntity.MateGoal.class)
+@Mixin(Fox.FoxBreedGoal.class)
 public class FoxMateGoal {
     @WrapOperation(method = "breed",
             at = @At(value = "INVOKE",
-                    target = "Lnet/minecraft/entity/passive/FoxEntity;addTrustedUuid(Ljava/util/UUID;)V"))
-    private void checkConfigValue(FoxEntity instance, UUID uuid, Operation<Void> original) {
+                    target = "Lnet/minecraft/world/entity/animal/Fox;addTrustedUUID(Ljava/util/UUID;)V"))
+    private void checkConfigValue(Fox instance, UUID uuid, Operation<Void> original) {
         if (TameableFoxesConfig.config.foxesTrustOnBorn) {
             original.call(instance, uuid);
             TameableTricksInterface ttInterface = ((TameableTricksInterface) (instance));
-            if (instance.getDataTracker().get(OWNER_UUID).isEmpty() && instance.getDataTracker().get(ttInterface.getOwnerTrackedData()).isPresent()) {
-                ttInterface.getTame().setTamed(true);
-                ttInterface.getTame().setOwnerUuid(instance.getDataTracker().get(ttInterface.getOwnerTrackedData()).orElse(null));
+            if (instance.getEntityData().get(TamableAnimal.DATA_OWNERUUID_ID).isEmpty() && instance.getEntityData().get(ttInterface.getOwnerTrackedData()).isPresent()) {
+                ttInterface.getTame().setTame(true);
+                ttInterface.getTame().setOwnerUUID(instance.getEntityData().get(ttInterface.getOwnerTrackedData()).orElse(null));
             }
         }
     }

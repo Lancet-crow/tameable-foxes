@@ -1,18 +1,17 @@
 package lancet_.tameable_foxes.mixin.fox_goals;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import lancet_.tameable_foxes.TameableFoxesConfig;
 import lancet_.tameable_foxes.TameableTricksInterface;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.AttackWithOwnerGoal;
-import net.minecraft.entity.ai.goal.TrackTargetGoal;
-import net.minecraft.entity.mob.Angerable;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.passive.FoxEntity;
-import net.minecraft.entity.passive.TameableEntity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.NeutralMob;
+import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.TargetGoal;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.Fox;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -20,25 +19,25 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(AttackWithOwnerGoal.class)
-public abstract class FoxAttackWithOwnerGoalMixin extends TrackTargetGoal {
+@Mixin(OwnerHurtTargetGoal.class)
+public abstract class FoxAttackWithOwnerGoalMixin extends TargetGoal {
     @Shadow
     @Final
-    private TameableEntity tameable;
+    private TamableAnimal tameAnimal;
 
     @Shadow
-    private LivingEntity attacking;
+    private LivingEntity ownerLastHurt;
 
-    public FoxAttackWithOwnerGoalMixin(MobEntity mob, boolean checkVisibility) {
+    public FoxAttackWithOwnerGoalMixin(Mob mob, boolean checkVisibility) {
         super(mob, checkVisibility);
     }
 
-    @ModifyExpressionValue(method = "canStart",
+    @ModifyExpressionValue(method = "canUse",
             at = @At(value = "INVOKE",
-                    target = "Lnet/minecraft/entity/passive/TameableEntity;" +
-                            "canAttackWithOwner(Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/entity/LivingEntity;)Z"))
+                    target = "Lnet/minecraft/world/entity/TamableAnimal;" +
+                            "wantsToAttack(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/entity/LivingEntity;)Z"))
     private boolean checkIfFox(boolean original, @Local LivingEntity target, @Local LivingEntity owner) {
-        if (((AnimalEntity) this.tameable) instanceof FoxEntity fox) {
+        if (((Animal) this.tameAnimal) instanceof Fox fox) {
             return ((TameableTricksInterface) fox).canAttackWithOwner(target, owner);
         }
         return original;
@@ -46,16 +45,16 @@ public abstract class FoxAttackWithOwnerGoalMixin extends TrackTargetGoal {
 
     @Inject(method = "start", at = @At("TAIL"))
     private void makeFoxAggressive(CallbackInfo ci) {
-        if (((AnimalEntity) this.tameable) instanceof FoxEntity fox) {
-            ((Angerable) fox).setAngryAt(attacking.getUuid());
+        if (((Animal) this.tameAnimal) instanceof Fox fox) {
+            ((NeutralMob) fox).setPersistentAngerTarget(ownerLastHurt.getUUID());
         }
     }
 
     @Override
-    public boolean shouldContinue() {
-        if (((AnimalEntity) this.tameable) instanceof FoxEntity){
-            return super.shouldContinue() && TameableFoxesConfig.config.foxesAttackWithOwner;
+    public boolean canContinueToUse() {
+        if (((Animal) this.tameAnimal) instanceof Fox){
+            return super.canContinueToUse() && TameableFoxesConfig.config.foxesAttackWithOwner;
         }
-        return super.shouldContinue();
+        return super.canContinueToUse();
     }
 }

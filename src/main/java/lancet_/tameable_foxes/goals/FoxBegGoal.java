@@ -2,55 +2,53 @@ package lancet_.tameable_foxes.goals;
 
 import lancet_.tameable_foxes.TameableFoxesConfig;
 import lancet_.tameable_foxes.TameableTricksInterface;
-import net.minecraft.entity.ai.TargetPredicate;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.passive.FoxEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
-import net.minecraft.world.World;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.animal.Fox;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
-import java.util.List;
-import java.util.stream.Stream;
 
 public class FoxBegGoal extends Goal {
-    private final FoxEntity fox;
-    private final World world;
+    private final Fox fox;
+    private final Level world;
     private final float begDistance;
-    private final TargetPredicate validPlayerPredicate;
+    private final TargetingConditions validPlayerPredicate;
     @Nullable
-    private PlayerEntity begFrom;
+    private Player begFrom;
     private int timer;
 
-    public FoxBegGoal(FoxEntity fox, float begDistance) {
+    public FoxBegGoal(Fox fox, float begDistance) {
         this.fox = fox;
-        this.world = fox.getWorld();
+        this.world = fox.level();
         this.begDistance = begDistance;
-        this.validPlayerPredicate = TargetPredicate.createNonAttackable().setBaseMaxDistance(begDistance);
-        this.setControls(EnumSet.of(Goal.Control.LOOK));
+        this.validPlayerPredicate = TargetingConditions.forNonCombat().range(begDistance);
+        this.setFlags(EnumSet.of(Goal.Flag.LOOK));
     }
 
     @Override
-    public boolean canStart() {
-        this.begFrom = this.world.getClosestPlayer(this.validPlayerPredicate, this.fox);
+    public boolean canUse() {
+        this.begFrom = this.world.getNearestPlayer(this.validPlayerPredicate, this.fox);
         return this.begFrom != null && this.isAttractive(this.begFrom);
     }
 
     @Override
-    public boolean shouldContinue() {
+    public boolean canContinueToUse() {
         if (this.begFrom != null && !this.begFrom.isAlive()) {
             return false;
         } else {
-            return !(this.fox.squaredDistanceTo(this.begFrom) > this.begDistance * this.begDistance) && this.timer > 0 && this.isAttractive(this.begFrom);
+            return !(this.fox.distanceToSqr(this.begFrom) > this.begDistance * this.begDistance) && this.timer > 0 && this.isAttractive(this.begFrom);
         }
     }
 
     @Override
     public void start() {
         ((TameableTricksInterface) this.fox).setBegging(true);
-        this.timer = this.getTickCount(40 + this.fox.getRandom().nextInt(40));
+        this.timer = this.adjustedTickDelay(40 + this.fox.getRandom().nextInt(40));
     }
 
     @Override
@@ -62,14 +60,14 @@ public class FoxBegGoal extends Goal {
     @Override
     public void tick() {
         if (this.begFrom != null) {
-            this.fox.getLookControl().lookAt(this.begFrom.getX(), this.begFrom.getEyeY(), this.begFrom.getZ(), 10.0F, this.fox.getMaxLookPitchChange());
+            this.fox.getLookControl().setLookAt(this.begFrom.getX(), this.begFrom.getEyeY(), this.begFrom.getZ(), 10.0F, this.fox.getMaxHeadXRot());
         }
         this.timer--;
     }
 
-    private boolean isAttractive(PlayerEntity player) {
-        for (Hand hand : Hand.values()) {
-            ItemStack itemStack = player.getStackInHand(hand);
+    private boolean isAttractive(Player player) {
+        for (InteractionHand hand : InteractionHand.values()) {
+            ItemStack itemStack = player.getItemInHand(hand);
             if (TameableFoxesConfig.getFoxTemptingItemStacks().anyMatch(attractiveStack -> attractiveStack.getItem().equals(itemStack.getItem()))) {
                 return true;
             }

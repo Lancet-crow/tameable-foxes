@@ -22,9 +22,11 @@ public final class TameableFoxesMixinPlugin implements IMixinConfigPlugin {
     private static final Supplier<Boolean> TRUE = () -> true;
 
     private static final Map<String, Supplier<Boolean>> CONDITIONS = ImmutableMap.of(
-            "lancet_.tameable_foxes.mixin.compat.NEAPetAnimationMixin", () -> FabricLoader.getInstance().isModLoaded("notenoughanimations"),
-            "lancet_.tameable_foxes.mixin.compat.CompanionHooksMixin", () -> FabricLoader.getInstance().isModLoaded("companion"),
-            "lancet_.tameable_foxes.mixin.compat.CompanionTargetGoalMixin", () -> FabricLoader.getInstance().isModLoaded("companion")
+            "lancet_.tameable_foxes.mixin.compat.notenoughanimations.NEAPetAnimationMixin", () -> FabricLoader.getInstance().isModLoaded("notenoughanimations"),
+            "lancet_.tameable_foxes.mixin.compat.companion.CompanionHooksMixin", () -> FabricLoader.getInstance().isModLoaded("companion"),
+            "lancet_.tameable_foxes.mixin.compat.companion.CompanionTargetGoalMixin", () -> FabricLoader.getInstance().isModLoaded("companion"),
+            "lancet_.tameable_foxes.mixin.compat.ecologics.EcologicsFoxMixin", () -> FabricLoader.getInstance().isModLoaded("ecologics"),
+            "lancet_.tameable_foxes.mixin.compat.ecologics.EcologicsSquirrelMixin", () -> FabricLoader.getInstance().isModLoaded("ecologics")
     );
 
     @Override

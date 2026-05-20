@@ -1,11 +1,11 @@
-package lancet_.tameable_foxes.mixin.compat;
+package lancet_.tameable_foxes.mixin.compat.companion;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.TrackTargetGoal;
-import net.minecraft.entity.mob.Angerable;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.passive.FoxEntity;
-import net.minecraft.entity.passive.TameableEntity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.NeutralMob;
+import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.ai.goal.target.TargetGoal;
+import net.minecraft.world.entity.animal.Fox;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -14,27 +14,27 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import snownee.companion.Hooks;
 
-@Mixin(TrackTargetGoal.class)
+@Mixin(TargetGoal.class)
 public class CompanionTargetGoalMixin {
 
     @Final
     @Shadow
-    protected MobEntity mob;
+    protected Mob mob;
     @Shadow
-    protected LivingEntity target;
+    protected LivingEntity targetMob;
 
     @Inject(
             at = {@At("HEAD")},
-            method = {"shouldContinue"},
+            method = {"canContinueToUse"},
             cancellable = true
     )
     private void tameableFoxes_canContinueToUse(CallbackInfoReturnable<Boolean> ci) {
         if (this.mob != null) {
-            LivingEntity var3 = this.target;
-            if (var3 instanceof FoxEntity fox) {
-                TameableEntity pet = (TameableEntity) (Object) fox;
+            LivingEntity var3 = this.targetMob;
+            if (var3 instanceof Fox fox) {
+                TamableAnimal pet = (TamableAnimal) (Object) fox;
                 if (!Hooks.wantsToAttack(pet, this.mob)) {
-                    ((Angerable) fox).stopAnger();
+                    ((NeutralMob) fox).stopBeingAngry();
                     ci.setReturnValue(false);
                 }
             }

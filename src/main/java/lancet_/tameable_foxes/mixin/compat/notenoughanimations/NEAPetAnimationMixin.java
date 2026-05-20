@@ -1,13 +1,13 @@
-package lancet_.tameable_foxes.mixin.compat;
+package lancet_.tameable_foxes.mixin.compat.notenoughanimations;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import dev.tr7zw.notenoughanimations.access.PlayerData;
 import dev.tr7zw.notenoughanimations.animations.hands.PetAnimation;
-import net.minecraft.client.network.AbstractClientPlayerEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.util.hit.EntityHitResult;
+import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.phys.EntityHitResult;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -20,10 +20,10 @@ public class NEAPetAnimationMixin {
     private Entity targetPet;
 
     @Inject(method = "isValid", at = @At("TAIL"), cancellable = true)
-    public void allowPettingFoxes(AbstractClientPlayerEntity entity, PlayerData data, CallbackInfoReturnable<Boolean> cir,
+    public void allowPettingFoxes(AbstractClientPlayer entity, PlayerData data, CallbackInfoReturnable<Boolean> cir,
                                   @Local EntityHitResult entHit) {
         if (entHit != null && entHit.getEntity().getType() == EntityType.FOX) {
-            AnimalEntity pet = (AnimalEntity) entHit.getEntity();
+            Animal pet = (Animal) entHit.getEntity();
             double dif = pet.getY() - entity.getY();
             if (Math.abs(dif) < 0.6) {
                 this.targetPet = pet;

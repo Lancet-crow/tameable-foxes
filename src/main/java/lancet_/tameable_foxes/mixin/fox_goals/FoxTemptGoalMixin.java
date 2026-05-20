@@ -3,14 +3,14 @@ package lancet_.tameable_foxes.mixin.fox_goals;
 import com.llamalad7.mixinextras.injector.ModifyReceiver;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import lancet_.tameable_foxes.TameableFoxesConfig;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.TemptGoal;
-import net.minecraft.entity.mob.PathAwareEntity;
-import net.minecraft.entity.passive.FoxEntity;
-import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.Ingredient;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.ai.goal.TemptGoal;
+import net.minecraft.world.entity.animal.Fox;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -23,46 +23,46 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class FoxTemptGoalMixin {
     @Shadow
     @Final
-    protected PathAwareEntity mob;
+    protected PathfinderMob mob;
 
-    @Shadow protected abstract boolean isTemptedBy(LivingEntity entity);
+    @Shadow protected abstract boolean shouldFollow(LivingEntity entity);
 
-    @Shadow @Nullable protected PlayerEntity closestPlayer;
+    @Shadow @Nullable protected Player player;
 
-    @Inject(method = "canStart", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "canUse", at = @At("HEAD"), cancellable = true)
     private void foxShouldStopIfTamed(CallbackInfoReturnable<Boolean> cir) {
-        if (this.mob instanceof FoxEntity fox && ((TameableEntity) (Object) fox).isTamed()) {
+        if (this.mob instanceof Fox fox && ((TamableAnimal) (Object) fox).isTame()) {
             cir.setReturnValue(false);
         }
     }
 
-    @ModifyReturnValue(method = "canStart", at = @At("RETURN"))
+    @ModifyReturnValue(method = "canUse", at = @At("RETURN"))
     private boolean notStartIfConfigIsOff(boolean original) {
-        if (this.mob instanceof FoxEntity){
+        if (this.mob instanceof Fox){
             return original && TameableFoxesConfig.config.untamedFoxesCanBeTempted;
         }
         return original;
     }
 
-    @Inject(method = "shouldContinue", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "canContinueToUse", at = @At("HEAD"), cancellable = true)
     private void foxShouldStopWhenSatOrConfigIsOff(CallbackInfoReturnable<Boolean> cir) {
-        if (this.mob instanceof FoxEntity fox){
-            if (fox.isSitting() || ((TameableEntity) (Object) fox).isTamed()) {
+        if (this.mob instanceof Fox fox){
+            if (fox.isSitting() || ((TamableAnimal) (Object) fox).isTame()) {
                 cir.setReturnValue(false);
             }
             if (!TameableFoxesConfig.config.untamedFoxesCanBeTempted) {
                 cir.setReturnValue(false);
             }
-            if (!isTemptedBy(this.closestPlayer)){
+            if (!shouldFollow(this.player)){
                 cir.setReturnValue(false);
             }
         }
     }
 
-    @ModifyReceiver(method = "isTemptedBy", at = @At(value = "INVOKE", target = "Lnet/minecraft/recipe/Ingredient;test(Lnet/minecraft/item/ItemStack;)Z"))
+    @ModifyReceiver(method = "shouldFollow", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/crafting/Ingredient;test(Lnet/minecraft/world/item/ItemStack;)Z"))
     private Ingredient updateTemptingStacks(Ingredient instance, ItemStack itemStack){
-        if (this.mob instanceof FoxEntity){
-            return Ingredient.ofStacks(TameableFoxesConfig.getFoxTemptingItemStacks());
+        if (this.mob instanceof Fox){
+            return Ingredient.of(TameableFoxesConfig.getFoxTemptingItemStacks());
         }
         return instance;
     }

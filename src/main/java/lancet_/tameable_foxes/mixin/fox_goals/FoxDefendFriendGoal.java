@@ -1,11 +1,11 @@
 package lancet_.tameable_foxes.mixin.fox_goals;
 
 import lancet_.tameable_foxes.TameableFoxesConfig;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.ActiveTargetGoal;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.passive.FoxEntity;
-import net.minecraft.entity.passive.TameableEntity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.animal.Fox;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -16,38 +16,38 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.function.Predicate;
 
-@Mixin(FoxEntity.DefendFriendGoal.class)
-public abstract class FoxDefendFriendGoal extends ActiveTargetGoal<LivingEntity> {
+@Mixin(Fox.DefendTrustedTargetGoal.class)
+public abstract class FoxDefendFriendGoal extends NearestAttackableTargetGoal<LivingEntity> {
     @Shadow(aliases = "field_17965")
     @Final
-    FoxEntity fox;
+    Fox fox;
 
     @Shadow
-    private @Nullable LivingEntity friend;
+    private @Nullable LivingEntity trustedLastHurt;
 
     @Shadow
-    private @Nullable LivingEntity offender;
+    private @Nullable LivingEntity trustedLastHurtBy;
 
     @Shadow
-    private int lastAttackedTime;
+    private int timestamp;
 
-    public FoxDefendFriendGoal(MobEntity mob, Class<LivingEntity> targetClass, boolean checkVisibility, Predicate<LivingEntity> targetPredicate) {
+    public FoxDefendFriendGoal(Mob mob, Class<LivingEntity> targetClass, boolean checkVisibility, Predicate<LivingEntity> targetPredicate) {
         super(mob, targetClass, checkVisibility, targetPredicate);
     }
 
-    @Inject(method = "canStart",
+    @Inject(method = "canUse",
             at = @At("HEAD"), cancellable = true)
     private void checkIfOwnerWasAttacked(CallbackInfoReturnable<Boolean> cir) {
-        TameableEntity tame = (TameableEntity) (Object) fox;
+        TamableAnimal tame = (TamableAnimal) (Object) fox;
         assert tame != null;
         if (!TameableFoxesConfig.config.foxesAttackWithOwner) {
             cir.setReturnValue(false);
             return;
         }
-        if (tame.isTamed() && tame.getOwner() != null) {
-            this.friend = tame.getOwner();
-            this.offender = this.friend.getAttacker();
-            if (this.friend.getLastAttackedTime() != this.lastAttackedTime && this.canTrack(this.offender, this.targetPredicate)) {
+        if (tame.isTame() && tame.getOwner() != null) {
+            this.trustedLastHurt = tame.getOwner();
+            this.trustedLastHurtBy = this.trustedLastHurt.getLastHurtByMob();
+            if (this.trustedLastHurt.getLastHurtByMobTimestamp() != this.timestamp && this.canAttack(this.trustedLastHurtBy, this.targetConditions)) {
                 cir.setReturnValue(true);
             }
         }

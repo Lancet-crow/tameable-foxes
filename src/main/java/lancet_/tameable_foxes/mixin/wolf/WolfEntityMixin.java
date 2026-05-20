@@ -1,14 +1,13 @@
 package lancet_.tameable_foxes.mixin.wolf;
 
 import lancet_.tameable_foxes.TameableFoxesConfig;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.passive.FoxEntity;
-import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.entity.passive.WolfEntity;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.animal.Fox;
+import net.minecraft.world.entity.animal.Wolf;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
-import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -18,27 +17,26 @@ import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 import java.util.function.Predicate;
 
-@Debug(export = true)
-@Mixin(WolfEntity.class)
-public abstract class WolfEntityMixin extends TameableEntity {
+@Mixin(Wolf.class)
+public abstract class WolfEntityMixin extends TamableAnimal {
 
     @Final
     @Shadow
-    public static Predicate<LivingEntity> FOLLOW_TAMED_PREDICATE;
+    public static Predicate<LivingEntity> PREY_SELECTOR;
 
-    public WolfEntityMixin(EntityType<? extends TameableEntity> entityType, World world) {
+    public WolfEntityMixin(EntityType<? extends TamableAnimal> entityType, Level world) {
         super(entityType, world);
     }
 
-    @ModifyArgs(method = "initGoals",
+    @ModifyArgs(method = "registerGoals",
             at = @At(value = "INVOKE",
-                    target = "Lnet/minecraft/entity/ai/goal/UntamedActiveTargetGoal;<init>(Lnet/minecraft/entity/passive/TameableEntity;Ljava/lang/Class;ZLjava/util/function/Predicate;)V"))
+                    target = "Lnet/minecraft/world/entity/ai/goal/target/NonTameRandomTargetGoal;<init>(Lnet/minecraft/world/entity/TamableAnimal;Ljava/lang/Class;ZLjava/util/function/Predicate;)V"))
     public void modifyPredicate(Args args) {
         @Nullable Predicate<LivingEntity> targetPredicate = args.get(3);
-        if (targetPredicate != null && targetPredicate.equals(FOLLOW_TAMED_PREDICATE)) {
+        if (targetPredicate != null && targetPredicate.equals(PREY_SELECTOR)) {
             args.set(3, targetPredicate.and(entity -> {
-                        if (entity instanceof FoxEntity fox &&
-                                ((TameableEntity) (Object) fox).isTamed() && !this.isTamed() &&
+                        if (entity instanceof Fox fox &&
+                                ((TamableAnimal) (Object) fox).isTame() && !this.isTame() &&
                                 !TameableFoxesConfig.config.untamedWolvesAttackTamedFoxes) {
                             return false;
                         }

@@ -1,32 +1,17 @@
 accessWidener	v2	named
-accessible method net/minecraft/entity/passive/FoxEntity getTrustedUuids ()Ljava/util/List;
-accessible method net/minecraft/entity/passive/FoxEntity setSleeping (Z)V
-accessible field net/minecraft/entity/ai/goal/AnimalMateGoal animal Lnet/minecraft/entity/passive/AnimalEntity;
-accessible field net/minecraft/entity/ai/goal/AnimalMateGoal mate Lnet/minecraft/entity/passive/AnimalEntity;
-accessible field net/minecraft/entity/passive/FoxEntity followChickenAndRabbitGoal Lnet/minecraft/entity/ai/goal/Goal;
-accessible field net/minecraft/entity/passive/FoxEntity followBabyTurtleGoal Lnet/minecraft/entity/ai/goal/Goal;
-accessible field net/minecraft/entity/passive/FoxEntity followFishGoal Lnet/minecraft/entity/ai/goal/Goal;
-accessible field net/minecraft/entity/mob/MobEntity goalSelector Lnet/minecraft/entity/ai/goal/GoalSelector;
-accessible field net/minecraft/entity/mob/MobEntity targetSelector Lnet/minecraft/entity/ai/goal/GoalSelector;
-accessible field net/minecraft/entity/passive/FoxEntity JUST_ATTACKED_SOMETHING_FILTER Ljava/util/function/Predicate;
-accessible method net/minecraft/entity/passive/FoxEntity isAggressive ()Z
-accessible method net/minecraft/entity/passive/FoxEntity canTrust (Ljava/util/UUID;)Z
-accessible field net/minecraft/entity/passive/FoxEntity OWNER Lnet/minecraft/entity/data/TrackedData;
-accessible method net/minecraft/entity/passive/FoxEntity stopActions ()V
-accessible field net/minecraft/entity/passive/FoxEntity CHICKEN_AND_RABBIT_FILTER Ljava/util/function/Predicate;
-accessible field net/minecraft/entity/LivingEntity jumping Z
-accessible method net/minecraft/entity/passive/FoxEntity setWalking (Z)V
-accessible class net/minecraft/entity/passive/FoxEntity$CalmDownGoal
-accessible method net/minecraft/entity/mob/MobEntity updateLeash ()V
-accessible method net/minecraft/entity/passive/FoxEntity setAggressive (Z)V
-accessible class net/minecraft/entity/passive/FoxEntity$FollowParentGoal
-accessible method net/minecraft/entity/passive/FoxEntity setSitting (Z)V
-accessible field net/minecraft/entity/passive/TameableEntity sitting Z
-accessible class net/minecraft/entity/passive/FoxEntity$AvoidDaylightGoal
-accessible class net/minecraft/entity/passive/FoxEntity$MoveToHuntGoal
-accessible class net/minecraft/entity/passive/FoxEntity$SitDownAndLookAroundGoal
-accessible class net/minecraft/entity/passive/FoxEntity$MateGoal
-accessible field net/minecraft/entity/passive/FoxEntity SITTING_FLAG I
-accessible field net/minecraft/entity/passive/TameableEntity OWNER_UUID Lnet/minecraft/entity/data/TrackedData;
-accessible class net/minecraft/entity/passive/FoxEntity$DefendFriendGoal
-accessible class net/minecraft/entity/passive/FoxEntity$AttackGoal
+accessible field net/minecraft/world/entity/animal/Fox DATA_TRUSTED_ID_0 Lnet/minecraft/network/syncher/EntityDataAccessor;
+accessible method net/minecraft/world/entity/animal/Fox setSleeping (Z)V
+accessible method net/minecraft/world/entity/animal/Fox isSitting ()Z
+accessible class net/minecraft/world/entity/animal/Fox$SeekShelterGoal
+accessible class net/minecraft/world/entity/animal/Fox$FoxFollowParentGoal
+accessible field net/minecraft/world/entity/animal/Fox landTargetGoal Lnet/minecraft/world/entity/ai/goal/Goal;
+accessible field net/minecraft/world/entity/animal/Fox turtleEggTargetGoal Lnet/minecraft/world/entity/ai/goal/Goal;
+accessible field net/minecraft/world/entity/Mob goalSelector Lnet/minecraft/world/entity/ai/goal/GoalSelector;
+accessible field net/minecraft/world/entity/animal/Fox fishTargetGoal Lnet/minecraft/world/entity/ai/goal/Goal;
+accessible field net/minecraft/world/entity/Mob targetSelector Lnet/minecraft/world/entity/ai/goal/GoalSelector;
+accessible class net/minecraft/world/entity/animal/Fox$DefendTrustedTargetGoal
+accessible class net/minecraft/world/entity/animal/Fox$FoxMeleeAttackGoal
+accessible field net/minecraft/world/entity/TamableAnimal DATA_OWNERUUID_ID Lnet/minecraft/network/syncher/EntityDataAccessor;
+accessible class net/minecraft/world/entity/animal/Fox$FoxBreedGoal
+accessible class net/minecraft/world/entity/animal/Fox$StalkPreyGoal
+accessible class net/minecraft/world/entity/animal/Fox$PerchAndSearchGoal

@@ -25,6 +25,7 @@ Yes, Tameable Foxes integrates with a few mods, here is the ones we know it work
 - [Not Enough Animations](https://modrinth.com/mod/not-enough-animations) - The pat animation when you press shift near your pets now works on Foxes too!
 - [Friendly Fire](https://modrinth.com/mod/friendly-fire) - While there is no built-in compat with this mod, it works perfectly fine with Tameable Foxes!
 - [Calm down, dog!](https://modrinth.com/mod/calm-down-dog) - While there is also no built-in compat with this mod, now you can calm your foxes by patting them so they stop biting your favorite friend!
+- [Ecologics](https://modrinth.com/mod/ecologics) - Tamed foxes from now don't attack the squirrels. Squirrels are also not feared of tamed foxes anymore (since 2.0.4)
 - <font color="#de3735">~~[Vulpine](https://modrinth.com/mod/vulpine)~~</font> - Unfortunately, you will have to choose between them. Tameable Foxes is entirely incompatible with Vulpine.
 
 ---
