@@ -45,7 +45,7 @@ public abstract class FoxAttackWithOwnerGoalMixin extends TargetGoal {
 
     @Inject(method = "start", at = @At("TAIL"))
     private void makeFoxAggressive(CallbackInfo ci) {
-        if (((Animal) this.tameAnimal) instanceof Fox fox) {
+        if (((Animal) this.tameAnimal) instanceof Fox fox && !TameableFoxesConfig.config.foxesAttackWithOwner) {
             ((NeutralMob) fox).setPersistentAngerTarget(ownerLastHurt.getUUID());
         }
     }

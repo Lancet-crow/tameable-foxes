@@ -317,6 +317,11 @@ public abstract class FoxEntityMixin extends Animal implements OwnableEntity, Ta
     }
 
     @Override
+    public boolean canAttack(LivingEntity target){
+        return getTame().isTame() ? TameableFoxesConfig.config.foxesAttackWithOwner : super.canAttack(target);
+    }
+
+    @Override
     public boolean canAttackWithOwner(LivingEntity target, LivingEntity owner) {
         if (target instanceof Creeper || target instanceof Ghast) {
             return false;

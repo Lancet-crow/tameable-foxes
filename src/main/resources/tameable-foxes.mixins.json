@@ -15,7 +15,7 @@
     "fox_goals.FoxAttackGoalMixin",
     "fox_goals.FoxAttackWithOwnerGoalMixin",
     "fox_goals.FoxAvoidDaylightGoalMixin",
-    "fox_goals.FoxDefendFriendGoal",
+    "fox_goals.FoxDefendOwnerGoalMixin",
     "fox_goals.FoxEscapeWhenNotAggroGoalMixin",
     "fox_goals.FoxFollowParentGoalMixin",
     "fox_goals.FoxLookAtEntityGoal",
