@@ -1,7 +1,7 @@
 package lancet_.tameable_foxes.mixin.fox_goals;
 
 
-import net.minecraft.world.entity.TamableAnimal;
+import lancet_.tameable_foxes.TameableTricksInterface;
 import net.minecraft.world.entity.animal.Fox;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -18,7 +18,7 @@ public class FoxMoveToHuntGoalMixin {
 
     @Inject(method = "canUse", at = @At("HEAD"), cancellable = true)
     private void tameable_foxes$canStart(CallbackInfoReturnable<Boolean> cir) {
-        if (((TamableAnimal) (Object) field_17995).isTame()) {
+        if (((TameableTricksInterface)field_17995).getTame().isTame()) {
             cir.setReturnValue(false);
             cir.cancel();
         }

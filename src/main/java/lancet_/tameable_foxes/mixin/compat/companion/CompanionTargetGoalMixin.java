@@ -1,5 +1,6 @@
 package lancet_.tameable_foxes.mixin.compat.companion;
 
+import lancet_.tameable_foxes.TameableTricksInterface;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.NeutralMob;
@@ -32,13 +33,12 @@ public class CompanionTargetGoalMixin {
         if (this.mob != null) {
             LivingEntity var3 = this.targetMob;
             if (var3 instanceof Fox fox) {
-                TamableAnimal pet = (TamableAnimal) (Object) fox;
+                TamableAnimal pet = ((TameableTricksInterface)fox).getTame();
                 if (!Hooks.wantsToAttack(pet, this.mob)) {
                     ((NeutralMob) fox).stopBeingAngry();
                     ci.setReturnValue(false);
                 }
             }
         }
-
     }
 }

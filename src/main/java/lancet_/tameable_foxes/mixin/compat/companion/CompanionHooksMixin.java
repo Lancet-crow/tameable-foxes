@@ -19,12 +19,20 @@ import java.util.Optional;
 
 @Mixin(Hooks.class)
 public class CompanionHooksMixin {
+
+    @Inject(method = "teleportWithRandomOffset", at = @At("HEAD"), cancellable = true)
+    private static void stopFoxIfSitting(LivingEntity entity, Level level, BlockPos blockPos, Boolean canFly, Entity avoidColliding, CallbackInfoReturnable<Optional<Vec3>> cir){
+        if (entity instanceof Fox fox && ((TameableTricksInterface)fox).getTame().isOrderedToSit()){
+            cir.setReturnValue(Optional.empty());
+        }
+    }
+
     @Inject(method = "teleportWithRandomOffset",
-            at = @At(value = "RETURN"))
+            at = @At("RETURN"))
     private static void stopFoxFromFleeingAfterTeleport(LivingEntity entity, Level level, BlockPos blockPos, Boolean canFly, Entity avoidColliding, CallbackInfoReturnable<Optional<Vec3>> cir) {
         if (cir.getReturnValue().isPresent()) {
             if (entity instanceof Fox fox) {
-                ((TameableTricksInterface) fox).getFoxGoalSelector().getAvailableGoals().forEach(goal -> {
+                ((TameableTricksInterface) fox).tameable_foxes$getFoxGoalSelector().getAvailableGoals().forEach(goal -> {
                     if (goal.getGoal() instanceof AvoidEntityGoal<?>) {
                         goal.getGoal().stop();
                     } else if (goal.getGoal() instanceof PanicGoal escGoal) {

@@ -3,9 +3,9 @@ package lancet_.tameable_foxes.mixin.fox_goals;
 import com.llamalad7.mixinextras.injector.ModifyReceiver;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import lancet_.tameable_foxes.TameableFoxesConfig;
+import lancet_.tameable_foxes.TameableTricksInterface;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.goal.TemptGoal;
 import net.minecraft.world.entity.animal.Fox;
 import net.minecraft.world.entity.player.Player;
@@ -31,7 +31,7 @@ public abstract class FoxTemptGoalMixin {
 
     @Inject(method = "canUse", at = @At("HEAD"), cancellable = true)
     private void foxShouldStopIfTamed(CallbackInfoReturnable<Boolean> cir) {
-        if (this.mob instanceof Fox fox && ((TamableAnimal) (Object) fox).isTame()) {
+        if (this.mob instanceof Fox fox && ((TameableTricksInterface) fox).getTame().isTame()) {
             cir.setReturnValue(false);
         }
     }
@@ -47,7 +47,7 @@ public abstract class FoxTemptGoalMixin {
     @Inject(method = "canContinueToUse", at = @At("HEAD"), cancellable = true)
     private void foxShouldStopWhenSatOrConfigIsOff(CallbackInfoReturnable<Boolean> cir) {
         if (this.mob instanceof Fox fox){
-            if (fox.isSitting() || ((TamableAnimal) (Object) fox).isTame()) {
+            if (fox.isSitting() || ((TameableTricksInterface)fox).getTame().isTame()) {
                 cir.setReturnValue(false);
             }
             if (!TameableFoxesConfig.config.untamedFoxesCanBeTempted) {

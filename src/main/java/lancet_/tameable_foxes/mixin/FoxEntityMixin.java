@@ -1,8 +1,10 @@
 package lancet_.tameable_foxes.mixin;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import lancet_.tameable_foxes.TameableFoxesConfig;
 import lancet_.tameable_foxes.TameableTricksInterface;
@@ -44,6 +46,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -90,13 +93,12 @@ public abstract class FoxEntityMixin extends Animal implements OwnableEntity, Ta
     public abstract void setSleeping(boolean sleeping);
 
     @Shadow
-    public abstract void setFaceplanted(boolean walking);
+    abstract void setFaceplanted(boolean walking);
 
     @Shadow
     public abstract void playAmbientSound();
 
-    @Shadow
-    abstract void addTrustedUUID(@Nullable UUID uuid);
+    @Shadow abstract void addTrustedUUID(@Nullable UUID uUID);
 
     @Inject(method = "readAdditionalSaveData", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/animal/Fox;setSleeping(Z)V"))
     private void checkIfPreviousOwnerExists(CompoundTag compoundTag, CallbackInfo ci) {
@@ -112,11 +114,6 @@ public abstract class FoxEntityMixin extends Animal implements OwnableEntity, Ta
     @Unique
     public TamableAnimal getTame() {
         return this.tame == null ? (TamableAnimal) (Object) this : this.tame;
-    }
-
-    @Override
-    public EntityDataAccessor<Optional<UUID>> getOwnerTrackedData() {
-        return DATA_TRUSTED_ID_0;
     }
 
     @Override
@@ -156,10 +153,9 @@ public abstract class FoxEntityMixin extends Animal implements OwnableEntity, Ta
             }
             if (this.random.nextFloat() >= 1 - TameableFoxesConfig.config.foxesTamingChance) {
                 getTame().tame(player);
-                this.getEntityData().set(DATA_TRUSTED_ID_0, Optional.ofNullable(player.getUUID()));
+                this.addTrustedUUID(player.getUUID());
                 this.getNavigation().stop();
                 this.setTarget(null);
-                this.setSitting(true);
                 this.level().broadcastEntityEvent(this, EntityEvent.TAMING_SUCCEEDED);
             } else {
                 this.level().broadcastEntityEvent(this, EntityEvent.TAMING_FAILED);
@@ -171,15 +167,14 @@ public abstract class FoxEntityMixin extends Animal implements OwnableEntity, Ta
         }
     }
 
-    @WrapMethod(method = "setSitting")
-    public void tameableFoxes$setSitting(boolean sitting, Operation<Void> original) {
-        if (sitting) {
+    @Inject(method = "setSitting", at = @At("TAIL"))
+    public void tameableFoxes$setSitting(boolean bl, CallbackInfo ci) {
+        if (bl) {
             this.setZza(0f);
             this.setFaceplanted(false);
         }
-        this.getTame().setOrderedToSit(sitting);
-        this.getTame().setInSittingPose(sitting);
-        original.call(sitting);
+        this.getTame().setOrderedToSit(bl);
+        this.getTame().setInSittingPose(bl);
     }
 
     @WrapMethod(method = "isSitting")
@@ -202,10 +197,16 @@ public abstract class FoxEntityMixin extends Animal implements OwnableEntity, Ta
     @WrapMethod(method = "onOffspringSpawnedFromEgg")
     private void ownerWithSpawnEggs(Player player, Mob mob, Operation<Void> original) {
         if (mob instanceof Fox fox) {
-            if (getTame().isTame() || TameableFoxesConfig.config.foxesTameDirectly) {
-                fox.getEntityData().set(Fox.DATA_TRUSTED_ID_0, Optional.of(player.getUUID()));
+            if (getTame().isTame() || TameableFoxesConfig.config.foxesTrustOnBorn) {
+                ((TameableTricksInterface)fox).getTame().tame(player);
+                original.call(player, mob);
             }
         }
+    }
+
+    @ModifyExpressionValue(method = "trusts", at = @At(value = "INVOKE", target = "Ljava/util/List;contains(Ljava/lang/Object;)Z"))
+    private boolean tameableFoxes$trusts(boolean original, @Local(argsOnly = true) UUID uUID){
+        return original || Objects.equals(getTame().getOwnerUUID(), uUID);
     }
 
     @Inject(method = "defineSynchedData", at = @At("TAIL"))
@@ -247,10 +248,17 @@ public abstract class FoxEntityMixin extends Animal implements OwnableEntity, Ta
             return false;
         } else if (!(other instanceof Fox otherFox)) {
             return false;
-        } else if (((TamableAnimal) (Object) otherFox).isTame() != getTame().isTame()) {
+        } else if (((TameableTricksInterface)otherFox).getTame().isTame() != getTame().isTame()) {
             return false;
         } else {
             return !otherFox.isSitting() && !this.isSitting() && this.isInLove() && otherFox.isInLove();
+        }
+    }
+
+    @WrapOperation(method = "clearStates", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/animal/Fox;setSitting(Z)V"))
+    private void restrictUnsittingIfOrderedToSit(Fox instance, boolean bl, Operation<Void> original){
+        if (!this.getTame().isOrderedToSit()){
+            original.call(instance, bl);
         }
     }
 
@@ -296,17 +304,17 @@ public abstract class FoxEntityMixin extends Animal implements OwnableEntity, Ta
     }
 
     @Override
-    public GoalSelector getFoxGoalSelector() {
+    public GoalSelector tameable_foxes$getFoxGoalSelector() {
         return this.goalSelector;
     }
 
     @Override
-    public boolean isBegging() {
+    public boolean tameable_foxes$isBegging() {
         return this.getEntityData().get(BEGGING);
     }
 
     @Override
-    public void setBegging(boolean begging) {
+    public void tameable_foxes$setBegging(boolean begging) {
         this.getEntityData().set(BEGGING, begging);
     }
 
@@ -344,6 +352,9 @@ public abstract class FoxEntityMixin extends Animal implements OwnableEntity, Ta
 
     @Override
     public void setPersistentAngerTarget(@Nullable UUID angryAt) {
+        if (Objects.equals(getTame().getOwnerUUID(), angryAt)){
+            return;
+        }
         this.angryAt = angryAt;
         if (angryAt != null) {
             this.setAggressive(true);

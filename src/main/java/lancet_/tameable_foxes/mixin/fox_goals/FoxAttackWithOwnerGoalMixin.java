@@ -52,8 +52,8 @@ public abstract class FoxAttackWithOwnerGoalMixin extends TargetGoal {
 
     @Override
     public boolean canContinueToUse() {
-        if (((Animal) this.tameAnimal) instanceof Fox){
-            return super.canContinueToUse() && TameableFoxesConfig.config.foxesAttackWithOwner;
+        if (((Animal) this.tameAnimal) instanceof Fox fox){
+            return super.canContinueToUse() && ((TameableTricksInterface) fox).canAttackWithOwner(ownerLastHurt, tameAnimal.getOwner());
         }
         return super.canContinueToUse();
     }

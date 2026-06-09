@@ -47,13 +47,13 @@ public class FoxBegGoal extends Goal {
 
     @Override
     public void start() {
-        ((TameableTricksInterface) this.fox).setBegging(true);
+        ((TameableTricksInterface) this.fox).tameable_foxes$setBegging(true);
         this.timer = this.adjustedTickDelay(40 + this.fox.getRandom().nextInt(40));
     }
 
     @Override
     public void stop() {
-        ((TameableTricksInterface) this.fox).setBegging(false);
+        ((TameableTricksInterface) this.fox).tameable_foxes$setBegging(false);
         this.begFrom = null;
     }
 

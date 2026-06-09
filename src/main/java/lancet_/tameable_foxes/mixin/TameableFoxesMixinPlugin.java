@@ -26,7 +26,8 @@ public final class TameableFoxesMixinPlugin implements IMixinConfigPlugin {
             "lancet_.tameable_foxes.mixin.compat.companion.CompanionHooksMixin", () -> FabricLoader.getInstance().isModLoaded("companion"),
             "lancet_.tameable_foxes.mixin.compat.companion.CompanionTargetGoalMixin", () -> FabricLoader.getInstance().isModLoaded("companion"),
             "lancet_.tameable_foxes.mixin.compat.ecologics.EcologicsFoxMixin", () -> FabricLoader.getInstance().isModLoaded("ecologics"),
-            "lancet_.tameable_foxes.mixin.compat.ecologics.EcologicsSquirrelMixin", () -> FabricLoader.getInstance().isModLoaded("ecologics")
+            "lancet_.tameable_foxes.mixin.compat.ecologics.EcologicsSquirrelMixin", () -> FabricLoader.getInstance().isModLoaded("ecologics"),
+            "lancet_.tameable_foxes.mixin.compat.supplementaries.SupplementariesCageMixin", () -> FabricLoader.getInstance().isModLoaded("supplementaries")
     );
 
     @Override

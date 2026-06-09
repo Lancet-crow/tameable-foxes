@@ -1,6 +1,7 @@
 package lancet_.tameable_foxes.mixin.wolf;
 
 import lancet_.tameable_foxes.TameableFoxesConfig;
+import lancet_.tameable_foxes.TameableTricksInterface;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.TamableAnimal;
@@ -34,14 +35,9 @@ public abstract class WolfEntityMixin extends TamableAnimal {
     public void modifyPredicate(Args args) {
         @Nullable Predicate<LivingEntity> targetPredicate = args.get(3);
         if (targetPredicate != null && targetPredicate.equals(PREY_SELECTOR)) {
-            args.set(3, targetPredicate.and(entity -> {
-                        if (entity instanceof Fox fox &&
-                                ((TamableAnimal) (Object) fox).isTame() && !this.isTame() &&
-                                !TameableFoxesConfig.config.untamedWolvesAttackTamedFoxes) {
-                            return false;
-                        }
-                        return true;
-                    })
+            args.set(3, targetPredicate.and(entity -> !(entity instanceof Fox fox) ||
+                    !((TameableTricksInterface) fox).getTame().isTame() || this.isTame() ||
+                    TameableFoxesConfig.config.untamedWolvesAttackTamedFoxes)
             );
         }
     }

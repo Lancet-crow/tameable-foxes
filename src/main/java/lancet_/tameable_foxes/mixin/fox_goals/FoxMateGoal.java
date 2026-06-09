@@ -4,12 +4,13 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import lancet_.tameable_foxes.TameableFoxesConfig;
 import lancet_.tameable_foxes.TameableTricksInterface;
-import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.animal.Fox;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
 import java.util.UUID;
+
+import static lancet_.tameable_foxes.mixin.FoxEntityMixin.DATA_TRUSTED_ID_0;
 
 @Mixin(Fox.FoxBreedGoal.class)
 public class FoxMateGoal {
@@ -20,9 +21,9 @@ public class FoxMateGoal {
         if (TameableFoxesConfig.config.foxesTrustOnBorn) {
             original.call(instance, uuid);
             TameableTricksInterface ttInterface = ((TameableTricksInterface) (instance));
-            if (instance.getEntityData().get(TamableAnimal.DATA_OWNERUUID_ID).isEmpty() && instance.getEntityData().get(ttInterface.getOwnerTrackedData()).isPresent()) {
+            if (ttInterface.getTame().getOwner() == null && instance.getEntityData().get(DATA_TRUSTED_ID_0).isPresent()) {
                 ttInterface.getTame().setTame(true);
-                ttInterface.getTame().setOwnerUUID(instance.getEntityData().get(ttInterface.getOwnerTrackedData()).orElse(null));
+                ttInterface.getTame().setOwnerUUID(instance.getEntityData().get(DATA_TRUSTED_ID_0).orElse(null));
             }
         }
     }

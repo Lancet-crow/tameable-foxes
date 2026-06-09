@@ -17,7 +17,7 @@ public class FoxLookAtEntityGoal {
 
     @Inject(method = "canUse", at = @At("RETURN"), cancellable = true)
     public void cantStartIfFoxBegging(CallbackInfoReturnable<Boolean> cir) {
-        if (((TameableTricksInterface) this.field_19261).isBegging()) {
+        if (((TameableTricksInterface) this.field_19261).tameable_foxes$isBegging()) {
             cir.setReturnValue(false);
         }
     }

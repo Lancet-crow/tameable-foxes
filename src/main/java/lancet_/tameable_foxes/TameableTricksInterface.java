@@ -10,11 +10,11 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface TameableTricksInterface {
-    GoalSelector getFoxGoalSelector();
+    GoalSelector tameable_foxes$getFoxGoalSelector();
 
-    boolean isBegging();
+    boolean tameable_foxes$isBegging();
 
-    void setBegging(boolean begging);
+    void tameable_foxes$setBegging(boolean begging);
 
     boolean canAttackWithOwner(LivingEntity target, LivingEntity owner);
 

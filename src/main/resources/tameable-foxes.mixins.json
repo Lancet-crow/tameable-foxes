@@ -12,6 +12,7 @@
     "compat.ecologics.EcologicsFoxMixin",
     "compat.ecologics.EcologicsSquirrelMixin",
     "compat.notenoughanimations.NEAPetAnimationMixin",
+    "compat.supplementaries.SupplementariesCageMixin",
     "fox_goals.FoxAttackGoalMixin",
     "fox_goals.FoxAttackWithOwnerGoalMixin",
     "fox_goals.FoxAvoidDaylightGoalMixin",
@@ -27,5 +28,8 @@
   ],
   "injectors": {
     "defaultRequire": 1
-	}
+  },
+  "mixinextras": {
+    "minVersion": "0.5.4"
+  }
 }
